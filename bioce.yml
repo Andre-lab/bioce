@@ -1,0 +1,12 @@
+name: bioce
+channels:
+- conda-forge
+- anaconda
+- defaults
+dependencies:
+- numpy
+- matplotlib
+- seaborn
+- pip:
+  - pystan
+  - pandas
