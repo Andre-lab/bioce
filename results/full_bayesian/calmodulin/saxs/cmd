@@ -1,0 +1,1 @@
+python /Users/wojciechpotrzebowski/Documents/masaxs/bayesian_virus_assembly/fullBayesian.py -p flat_wghts.txt -s TrmIntSub.txt -e CAM_SMB_stdError.dat -f file_list_sub.txt -j 4 -c 2 -i 4000

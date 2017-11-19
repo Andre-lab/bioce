@@ -1,0 +1,45 @@
+trans_1CLL_full_noCA_0010_955 0.242760248016
+trans_1CLL_full_noCA_0127_52 0.192008671984
+trans_1CLL_full_noCA_0163_138 0.565231080001
+JSD: 0.0446688550035
+Chi2 SAXS:0.875561246864
+Chi2 CS:1.04215081804
+Inference for Stan model: anon_model_692805c9d878d900ea86180964893b5c.
+2 chains, each with iter=4000; warmup=2000; thin=1; 
+post-warmup draws per chain=2000, total post-warmup draws=4000.
+
+                 mean se_mean     sd   2.5%    25%    50%    75%  97.5%
+n_eff   Rhat
+weights[0]       0.24  9.1e-4   0.04   0.17   0.22   0.24   0.27   0.32
+1726.0    1.0
+weights[1]       0.19  7.9e-4   0.03   0.14   0.17   0.19   0.21   0.25
+1346.0    1.0
+weights[2]       0.57  3.0e-4   0.02   0.53   0.55   0.57   0.58    0.6
+3586.0    1.0
+scale            1.13  1.8e-5 7.7e-4   1.13   1.13   1.13   1.13   1.13
+1765.0    nan
+boltzman_shift  119.9    0.02   0.47 119.15 119.57 119.85 120.18 120.97
+921.0    1.0
+lp__           -435.6    0.04   1.43 -439.3 -436.3 -435.3 -434.6 -433.9
+1202.0    1.0
+
+
+python /home/wojtek/scripts/bwanalyze.py -b
+CAM_SMB_stdErrorEP_CS_last.out -l file_names -i
+TrmSimulatedIntensities.dat -e CAM_SMB_stdError1c.dat -r
+CAM_SMB_stdError1c.err -t 0.002 -o 1 -c 1 
+Structures read:  1004 1004
+Calc Exp shape (392, 1004) (392,)
+CaclulatedIns shape (392,)
+trans_1CLL_full_noCA_0010_955 0.275902
+trans_1CLL_full_noCA_0127_52 0.169232
+trans_1CLL_full_noCA_0163_138 0.554452
+Sum of weights: 0.999586 from 3 structures
+345.191199053 1.12945764282 392
+0.880589793503
+Crysol Chi:  715.955769098 1.00188013189 724
+0.988889183837
+Chi:  246.824635252
+1.07041994815
+(392, 3)
+

@@ -1,0 +1,53 @@
+#Another try:
+
+trans_1CLL_full_noCA_0079_998 0.0680204129472
+trans_1CLL_full_noCA_0088_350 0.00724389926771
+trans_1CLL_full_noCA_0120_355 0.000963690263045
+trans_1CLL_full_noCA_0127_52 0.310142919758
+trans_1CLL_full_noCA_0163_138 0.613629077764
+JSD: 0.059433283629
+Chi2 SAXS:0.894586650698
+Inference for Stan model: anon_model_77ae9cac10a4e3922652326f180bb8e9.
+2 chains, each with iter=8000; warmup=4000; thin=1; 
+post-warmup draws per chain=4000, total post-warmup draws=8000.
+
+                 mean se_mean     sd   2.5%    25%    50%    75%  97.5%  n_eff   Rhat
+weights[0]       0.07  4.2e-4   0.02   0.04   0.06   0.07   0.08    0.1 1392.0    1.0
+weights[1]     7.2e-3  3.6e-4 7.8e-3 2.2e-7 8.0e-4 4.3e-3   0.01   0.03  462.0   1.01
+weights[2]     9.6e-4  3.7e-4 9.3e-31.5e-3025.6e-2304.1e-1442.6e-67 3.4e-5  622.0    1.0
+weights[3]       0.31  6.8e-4   0.02   0.27    0.3   0.31   0.32   0.35  934.0    1.0
+weights[4]       0.61  5.3e-4   0.02   0.58    0.6   0.61   0.63   0.65 1203.0    1.0
+scale            1.14  8.6e-5 2.1e-3   1.14   1.14   1.14   1.14   1.14  628.0   1.01
+boltzman_shift 121.22    0.02    0.4 120.53 120.95  121.2 121.46  122.1  667.0    1.0
+lp__           -231.4    0.07   1.89 -236.1 -232.3 -231.0 -230.0 -229.0  712.0    1.0
+
+#Limitted to 4models
+trans_1CLL_full_noCA_0079_998 0.067504117365
+trans_1CLL_full_noCA_0120_355 0.000140429880663
+trans_1CLL_full_noCA_0127_52 0.324611410002
+trans_1CLL_full_noCA_0163_138 0.607744042752
+JSD: 0.032907087499
+Chi2 SAXS:0.892160901757
+Inference for Stan model: anon_model_77ae9cac10a4e3922652326f180bb8e9.
+2 chains, each with iter=4000; warmup=2000; thin=1; 
+post-warmup draws per chain=2000, total post-warmup draws=4000.
+
+                 mean se_mean     sd   2.5%    25%    50%    75%  97.5%  n_eff   Rhat
+weights[0]       0.07  5.7e-4   0.02   0.04   0.06   0.07   0.08    0.1  800.0    1.0
+weights[1]     1.4e-4  1.4e-4 4.3e-35.1e-3031.4e-2401.8e-1649.4e-842.5e-10 1000.0    1.0
+weights[2]       0.32  5.3e-4   0.02   0.29   0.31   0.32   0.34   0.36  862.0    1.0
+weights[3]       0.61  5.4e-4   0.02   0.58    0.6   0.61   0.62   0.64  954.0    1.0
+scale            1.14  3.7e-5 1.1e-3   1.14   1.14   1.14   1.14   1.14  915.0    1.0
+boltzman_shift  119.4    0.01   0.36 118.78 119.14 119.37 119.62 120.17  804.0    1.0
+lp__           -218.0    0.05   1.48 -221.6 -218.7 -217.6 -216.9 -216.1  806.0    1.0
+
+itrans_1CLL_full_noCA_0075_834 0.000227723
+trans_1CLL_full_noCA_0079_998 0.0666765
+trans_1CLL_full_noCA_0088_350 0.000380088
+trans_1CLL_full_noCA_0120_355 0.191179
+trans_1CLL_full_noCA_0127_52 0.276913
+trans_1CLL_full_noCA_0163_138 0.464623
+Sum of weights: 0.999999311 from 6 structures
+342.875840768 1.13951352582 392
+0.874683267264
+(392, 6)

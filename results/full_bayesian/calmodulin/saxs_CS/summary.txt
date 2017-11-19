@@ -1,0 +1,52 @@
+trans_1CLL_full_noCA_0027_129 0.109975645488
+trans_1CLL_full_noCA_0084_648 0.473067547534
+trans_1CLL_full_noCA_0085_688 0.152123036273
+trans_1CLL_full_noCA_0141_731 0.264833770705
+JSD: 0.086091640445
+Chi2 SAXS:0.803216142652
+Chi2 CS:0.997689409824
+Inference for Stan model: anon_model_7be9f74f1143c05f4586e4c96ecebcc7.
+2 chains, each with iter=4000; warmup=2000; thin=1; 
+post-warmup draws per chain=2000, total post-warmup draws=4000.
+
+             mean se_mean     sd   2.5%    25%    50%    75%  97.5%
+n_eff   Rhat
+weights[0]   0.11  1.4e-3   0.05 6.8e-3   0.07   0.11   0.14   0.21
+1272.0    1.0
+weights[1]   0.47  1.3e-3   0.04    0.4   0.45   0.47    0.5   0.55
+884.0    1.0
+weights[2]   0.15  1.1e-3   0.03   0.09   0.13   0.15   0.17   0.21
+804.0    1.0
+weights[3]   0.26  4.6e-4   0.02   0.23   0.25   0.26   0.28    0.3
+1409.0    1.0
+scale         0.9  2.1e-4 5.9e-3   0.89    0.9    0.9   0.91   0.91
+766.0    1.0
+lp__       -382.9    0.06    1.6 -386.8 -383.6 -382.5 -381.7 -380.9
+797.0    1.0
+
+Samples were drawn using NUTS at Thu Nov 16 16:38:09 2017.
+For each parameter, n_eff is a crude measure of effective sample size,
+and Rhat is the potential scale reduction factor on split chains (at 
+convergence, Rhat=1).
+
+wojtek@mogwai:~/masaxs/calmodulin/run/stan_CS$ python
+/home/wojtek/scripts/bwanalyze.py -b CAM_SMB_stdError_CS2_last.out -l
+file_names -i TrmSimulatedIntensities.dat -e CAM_SMB_stdError1c.dat -r
+CAM_SMB_stdError1c.err -t 0.003 -o 1 -c 1 
+
+Structures read:  1004 1004
+Calc Exp shape (392, 1004) (392,)
+CaclulatedIns shape (392,)
+trans_1CLL_full_noCA_0027_129 0.122884
+trans_1CLL_full_noCA_0084_648 0.451351
+trans_1CLL_full_noCA_0085_688 0.161049
+trans_1CLL_full_noCA_0141_731 0.261884
+Sum of weights: 0.997168 from 4 structures
+315.855399514 0.906289195644 392
+0.80575357019
+Crysol Chi:  686.507772678 1.00427850636 724
+0.948215155633
+Chi:  383.311166735
+1.36841240215
+(392, 4)
+

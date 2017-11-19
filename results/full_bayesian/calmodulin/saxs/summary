@@ -1,0 +1,29 @@
+trans_1CLL_full_noCA_0031_894 0.118554916823
+trans_1CLL_full_noCA_0079_998 0.0192425857402
+trans_1CLL_full_noCA_0163_138 0.693744277557
+trans_1CLL_full_noCA_0238_582 0.16845821988
+JSD: 0.068926776402
+Chi2 SAXS:0.829317577279
+Inference for Stan model: anon_model_31496dff6395cf96354e7d3b65f39087.
+2 chains, each with iter=4000; warmup=2000; thin=1; 
+post-warmup draws per chain=2000, total post-warmup draws=4000.
+
+             mean se_mean     sd   2.5%    25%    50%    75%  97.5%  n_eff   Rhat
+weights[0]   0.12  7.4e-4   0.02   0.08    0.1   0.12   0.13   0.16  832.0    1.0
+weights[1]   0.02  4.1e-4   0.01 1.2e-4 7.0e-3   0.02   0.03   0.05 1240.0    1.0
+weights[2]   0.69  5.8e-4   0.02   0.66   0.68   0.69   0.71   0.73 1108.0    1.0
+weights[3]   0.17  1.3e-3   0.04   0.09   0.14   0.17   0.19   0.24  783.0    1.0
+scale        1.14  3.6e-5 1.2e-3   1.14   1.14   1.14   1.14   1.14 1159.0    1.0
+lp__       -170.9    0.05   1.61 -174.9 -171.8 -170.6 -169.7 -168.9  864.0    1.0
+
+Well agrees with vbw
+Calc Exp shape (392, 51) (392,)
+CaclulatedIns shape (392,)
+trans_1CLL_full_noCA_0031_894 0.116355
+trans_1CLL_full_noCA_0079_998 0.020178
+trans_1CLL_full_noCA_0163_138 0.692046
+trans_1CLL_full_noCA_0238_582 0.171421
+Sum of weights: 1.0 from 4 structures
+325.069083495 1.14126533296 392
+0.829257866058
+(392, 4)

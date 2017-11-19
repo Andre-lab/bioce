@@ -1,0 +1,39 @@
+c2de_rx_0043_494 0.453657867676
+c2de_rx_0044_540 0.364580269668
+c2de_rx_0060_823 0.0594889004072
+c2de_rx_0187_340 0.0080960998756
+c2de_rx_0203_786 0.11128988679
+c2de_rx_0204_595 0.00288697558297
+JSD: 0.281352020029
+Chi2 SAXS:3.5578038773
+Chi2 CS:11.3998068016
+Inference for Stan model: anon_model_692805c9d878d900ea86180964893b5c.
+2 chains, each with iter=4000; warmup=2000; thin=1; 
+post-warmup draws per chain=2000, total post-warmup draws=4000.
+
+                 mean se_mean     sd   2.5%    25%    50%    75%  97.5%
+n_eff   Rhat
+weights[0]       0.45    0.13   0.13   0.28   0.31   0.55   0.57   0.57
+1.0   3.11
+weights[1]       0.36    0.07   0.07   0.27   0.29   0.41   0.43   0.43
+1.0   4.06
+weights[2]       0.06    0.07   0.071.6e-2019.0e-1456.2e-41   0.13
+0.16    1.0   2.73
+weights[3]     8.1e-3  9.8e-3   0.033.0e-1592.0e-683.9e-491.7e-25   0.16
+12.0   1.13
+weights[4]       0.11    0.13   0.131.2e-2823.5e-1003.1e-15   0.26
+0.31    1.0   2.41
+weights[5]     2.9e-3  1.5e-3   0.011.7e-209.5e-149.0e-10 1.5e-5   0.03
+65.0   1.05
+scale            1.77     0.2    0.2   1.57   1.58   1.64   1.99   2.05
+1.0   3.39
+boltzman_shift 147.59    0.13   0.26 147.08 147.42 147.61 147.75 148.07
+4.0   1.12
+lp__            -6872   16.06  16.06  -6889  -6887  -6884  -6854  -6851
+1.0   3.73
+
+Samples were drawn using NUTS at Sat Nov 18 22:52:00 2017.
+For each parameter, n_eff is a crude measure of effective sample size,
+and Rhat is the potential scale reduction factor on split chains (at 
+convergence, Rhat=1).
+

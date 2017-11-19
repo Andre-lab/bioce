@@ -295,7 +295,7 @@ def calculate_stats(fit, experimental, simulated, cs_simulated=None,
     crysol_chi2 = calculateChiCrysol(np.dot(bayesian_weights,
                             np.transpose(simulated)), experimental[:,1],
                             experimental[:,2])
-    if cs_experimental.any()!=None:
+    if cs_experimental.any() != None:
         chemshift_chi2 = calculateChemShiftsChi(np.dot(bayesian_weights,
                             np.transpose(cs_simulated)), cs_experimental[:,0],
                             cs_experimental[:,1], cs_rms)
@@ -418,3 +418,4 @@ if __name__=="__main__":
                 print(fname,bayesian_weights[index])
             print("JSD: "+str(jsd))
             print("Chi2 SAXS:"+str(crysol_chi2))
+        print(fit)
