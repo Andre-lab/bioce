@@ -145,7 +145,7 @@ def execute_stan_CS(experimental, simulated, priors,
 
     return fit
 
-def execute_bws(experimental, simulated, priors, file_names,
+def execute_bws(experimental, simulated, priors, file_names, threshold,
                 iterations, chains, njobs):
     """
     Bayesian weighting with selection algorithm
@@ -170,7 +170,6 @@ def execute_bws(experimental, simulated, priors, file_names,
     alphas = priors
     log_file = open("full_bayesian.log","w")
 
-    threshold = 0.001
     post_loo = None
     last_loo = None
     model_comp_diff = 1
@@ -349,7 +348,7 @@ if __name__=="__main__":
     parser.add_option("-i", "--iterations", dest="iterations",default = 2000,
                       type = 'int',
                       help="Number of iterations")
-    parser.add_option("-j", "--jobes", dest="njobs",default = 8,
+    parser.add_option("-j", "--jobs", dest="njobs",default = 8,
                       type = 'int',
                       help="Number of procceses to run")
     parser.add_option("-c", "--chains", dest="chains",default = 4,
@@ -381,7 +380,7 @@ if __name__=="__main__":
 
     #If weight threshold set running Bayesian with selection
     if options.weight_cut:
-        execute_bws(experimental, simulated, priors, file_names,
+        execute_bws(experimental, simulated, priors, file_names, options.weight_cut,
                 iterations, chains, njobs)
     else:
         #Running siumlations depending on options selected
