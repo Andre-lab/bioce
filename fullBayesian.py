@@ -13,6 +13,7 @@ import optparse
 import numpy as np
 import pystan
 import psisloo
+import matplotlib.pyplot as plt
 
 from statistics import calculateChiCrysol, calculateChemShiftsChi, JensenShannonDiv
 from stan_models import stan_code, stan_code_CS, stan_code_EP, stan_code_EP_CS, \
@@ -37,10 +38,19 @@ def execute_stan(experimental, simulated, priors, iterations, chains, njobs):
             "n_structures" : np.shape(simulated)[1],
             "priors":priors}
     sm = pystan.StanModel(model_code=stan_code)
-    fit = sm.sampling(data=stan_dat, iter=iterations, chains=chains, n_jobs=njobs)
-
-    fig = fit.plot(pars="weights")
-    fig.savefig("stan_weights.png")
+    fit = sm.sampling(data=stan_dat, iter=iterations, chains=chains, n_jobs=njobs, sample_file="saved_samples.txt")
+    samples = fit.extract(permuted=True)
+    #n, bins, patches = plt.hist(samples['weight[0]'], 50, normed=1, facecolor='g', alpha=0.75)
+    n, bins, patches = plt.hist(samples['weight[0]'], 50, normed=1, facecolor='g', alpha=0.75)
+    plt.xlabel('Smarts')
+    plt.ylabel('Probability')
+    #plt.title('Histogram of IQ')
+    #plt.text(60, .025, r'$\mu=100,\ \sigma=15$')
+    #plt.axis([40, 160, 0, 0.03])
+    plt.grid(True)
+    plt.show()
+    #fig = fit.plot(pars="weights")
+    #fig.savefig("stan_weights.png")
 
     return fit
 
@@ -64,7 +74,7 @@ def execute_stan_EP(experimental, simulated, priors, iterations, chains, njobs):
             "n_structures" : np.shape(simulated)[1],
             "energy_priors":priors}
     sm = pystan.StanModel(model_code=stan_code_EP)
-    fit = sm.sampling(data=stan_dat, iter=iterations, chains=chains, n_jobs=njobs)
+    fit = sm.sampling(data=stan_dat, iter=iterations, chains=chains, n_jobs=njobs, sample_file="saved_samples.txt")
 
     fig = fit.plot(pars="weights")
     fig.savefig("stan_weights_EP.png")
@@ -101,10 +111,21 @@ def execute_stan_EP_CS(experimental, simulated, priors,
             "energy_priors":priors}
 
     sm = pystan.StanModel(model_code=stan_code_EP_CS)
-    fit = sm.sampling(data=stan_dat, iter=iterations, chains=chains, n_jobs=njobs)
+    fit = sm.sampling(data=stan_dat, iter=iterations, chains=chains, n_jobs=njobs, sample_file="saved_samples.txt")
 
-    fig = fit.plot(pars="weights")
-    fig.savefig("stan_weights_EP_CS.png")
+    samples = fit.extract(permuted=True)
+    print(samples)
+    n, bins, patches = plt.hist(samples['weights'][0], 50, normed=1, facecolor='g', alpha=0.75)
+    #n, bins, patches = plt.hist(samples['weights'])
+    plt.xlabel('Smarts')
+    plt.ylabel('Probability')
+    # plt.title('Histogram of IQ')
+    # plt.text(60, .025, r'$\mu=100,\ \sigma=15$')
+    # plt.axis([40, 160, 0, 0.03])
+    plt.grid(True)
+    plt.show()
+    # fig = fit.plot(pars="weights")
+    # fig.savefig("stan_weights.png")
 
     return fit
 
@@ -138,7 +159,7 @@ def execute_stan_CS(experimental, simulated, priors,
             "priors":priors}
 
     sm = pystan.StanModel(model_code=stan_code_CS)
-    fit = sm.sampling(data=stan_dat, iter=iterations, chains=chains, n_jobs=njobs)
+    fit = sm.sampling(data=stan_dat, iter=iterations, chains=chains, n_jobs=njobs, sample_file="saved_samples.txt")
 
     fig = fit.plot(pars="weights")
     fig.savefig("stan_weights_CS.png")
