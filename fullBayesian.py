@@ -39,18 +39,14 @@ def execute_stan(experimental, simulated, priors, iterations, chains, njobs):
             "priors":priors}
     sm = pystan.StanModel(model_code=stan_code)
     fit = sm.sampling(data=stan_dat, iter=iterations, chains=chains, n_jobs=njobs, sample_file="saved_samples.txt")
-    samples = fit.extract(permuted=True)
-    #n, bins, patches = plt.hist(samples['weight[0]'], 50, normed=1, facecolor='g', alpha=0.75)
-    n, bins, patches = plt.hist(samples['weight[0]'], 50, normed=1, facecolor='g', alpha=0.75)
-    plt.xlabel('Smarts')
-    plt.ylabel('Probability')
-    #plt.title('Histogram of IQ')
-    #plt.text(60, .025, r'$\mu=100,\ \sigma=15$')
-    #plt.axis([40, 160, 0, 0.03])
-    plt.grid(True)
-    plt.show()
-    #fig = fit.plot(pars="weights")
-    #fig.savefig("stan_weights.png")
+
+    fig = fit.plot(pars="weights")
+    fig.subplots_adjust(wspace=0.8)
+    fig.savefig("stan_weights.png")
+
+    fig = fit.plot(pars="scale")
+    fig.subplots_adjust(wspace=0.8)
+    fig.savefig("stan_scale.png", dpi=300)
 
     return fit
 
@@ -77,7 +73,17 @@ def execute_stan_EP(experimental, simulated, priors, iterations, chains, njobs):
     fit = sm.sampling(data=stan_dat, iter=iterations, chains=chains, n_jobs=njobs, sample_file="saved_samples.txt")
 
     fig = fit.plot(pars="weights")
+    fig.subplots_adjust(wspace=0.8)
     fig.savefig("stan_weights_EP.png")
+
+    fig = fit.plot(pars="boltzman_shift")
+    fig.subplots_adjust(wspace=0.8)
+    fig.savefig("stan_boltzmann_EP.png", dpi=300)
+
+    fig = fit.plot(pars="scale")
+    fig.subplots_adjust(wspace=0.8)
+    fig.savefig("stan_scale_EP.png", dpi=300)
+
 
     return fit
 
@@ -113,19 +119,17 @@ def execute_stan_EP_CS(experimental, simulated, priors,
     sm = pystan.StanModel(model_code=stan_code_EP_CS)
     fit = sm.sampling(data=stan_dat, iter=iterations, chains=chains, n_jobs=njobs, sample_file="saved_samples.txt")
 
-    samples = fit.extract(permuted=True)
-    print(samples)
-    n, bins, patches = plt.hist(samples['weights'][0], 50, normed=1, facecolor='g', alpha=0.75)
-    #n, bins, patches = plt.hist(samples['weights'])
-    plt.xlabel('Smarts')
-    plt.ylabel('Probability')
-    # plt.title('Histogram of IQ')
-    # plt.text(60, .025, r'$\mu=100,\ \sigma=15$')
-    # plt.axis([40, 160, 0, 0.03])
-    plt.grid(True)
-    plt.show()
-    # fig = fit.plot(pars="weights")
-    # fig.savefig("stan_weights.png")
+    fig = fit.plot(pars="weights")
+    fig.subplots_adjust(wspace=0.8)
+    fig.savefig("stan_weights_EP_CS.png", dpi=300)
+
+    fig = fit.plot(pars="boltzman_shift")
+    fig.subplots_adjust(wspace=0.8)
+    fig.savefig("stan_boltzmann_EP_CS.png", dpi=300)
+
+    fig = fit.plot(pars="scale")
+    fig.subplots_adjust(wspace=0.8)
+    fig.savefig("stan_scale_EP_CS.png", dpi=300)
 
     return fit
 
@@ -162,8 +166,12 @@ def execute_stan_CS(experimental, simulated, priors,
     fit = sm.sampling(data=stan_dat, iter=iterations, chains=chains, n_jobs=njobs, sample_file="saved_samples.txt")
 
     fig = fit.plot(pars="weights")
+    fig.subplots_adjust(wspace=0.8)
     fig.savefig("stan_weights_CS.png")
 
+    fig = fit.plot(pars="scale")
+    fig.subplots_adjust(wspace=0.8)
+    fig.savefig("stan_scale.png", dpi=300)
     return fit
 
 def execute_bws(experimental, simulated, priors, file_names, threshold,
@@ -244,6 +252,7 @@ def execute_bws(experimental, simulated, priors, file_names, threshold,
         file_names = file_names[current_weights>threshold]
         #np.savetxt("fit.txt",fit.summary()['summary'][:,0],delimiter=" ")
         fig = fit.plot()
+        fig.subplots_adjust(wspace=0.8)
         fig.savefig("stan_fit_"+str(iteration)+".png")
         bayesian_weights, jsd, crysol_chi2 = calculate_stats(fit,
                                         experimental, simulated)
