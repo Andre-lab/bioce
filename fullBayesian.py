@@ -42,7 +42,7 @@ def execute_stan(experimental, simulated, priors, iterations, chains, njobs):
 
     fig = fit.plot(pars="weights")
     fig.subplots_adjust(wspace=0.8)
-    fig.savefig("stan_weights.png")
+    fig.savefig("stan_weights.png", dpi=300)
 
     fig = fit.plot(pars="scale")
     fig.subplots_adjust(wspace=0.8)
@@ -74,7 +74,7 @@ def execute_stan_EP(experimental, simulated, priors, iterations, chains, njobs):
 
     fig = fit.plot(pars="weights")
     fig.subplots_adjust(wspace=0.8)
-    fig.savefig("stan_weights_EP.png")
+    fig.savefig("stan_weights_EP.png", dpi=300)
 
     fig = fit.plot(pars="boltzman_shift")
     fig.subplots_adjust(wspace=0.8)
@@ -167,7 +167,7 @@ def execute_stan_CS(experimental, simulated, priors,
 
     fig = fit.plot(pars="weights")
     fig.subplots_adjust(wspace=0.8)
-    fig.savefig("stan_weights_CS.png")
+    fig.savefig("stan_weights_CS.png", dpi=300)
 
     fig = fit.plot(pars="scale")
     fig.subplots_adjust(wspace=0.8)
@@ -253,7 +253,7 @@ def execute_bws(experimental, simulated, priors, file_names, threshold,
         #np.savetxt("fit.txt",fit.summary()['summary'][:,0],delimiter=" ")
         fig = fit.plot()
         fig.subplots_adjust(wspace=0.8)
-        fig.savefig("stan_fit_"+str(iteration)+".png")
+        fig.savefig("stan_fit_"+str(iteration)+".png",  dpi=300)
         bayesian_weights, jsd, crysol_chi2 = calculate_stats(fit,
                                         experimental, simulated)
         log_file.write("JSD: "+str(jsd))
@@ -325,7 +325,13 @@ def calculate_stats(fit, experimental, simulated, cs_simulated=None,
     crysol_chi2 = calculateChiCrysol(np.dot(bayesian_weights,
                             np.transpose(simulated)), experimental[:,1],
                             experimental[:,2])
-    if cs_experimental != None:
+    try:
+        if cs_experimental.any() != None:
+            chemical_shifts_on = True
+    except:
+        chemical_shifts_on = False
+
+    if chemical_shifts_on:
         chemshift_chi2 = calculateChemShiftsChi(np.dot(bayesian_weights,
                             np.transpose(cs_simulated)), cs_experimental[:,0],
                             cs_experimental[:,1], cs_rms)
