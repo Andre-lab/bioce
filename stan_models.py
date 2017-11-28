@@ -70,7 +70,7 @@ data {
 
 parameters {
   simplex[n_structures] weights;
-  real<lower=0.0001> scale;
+  real<lower=0> scale;
   real boltzman_shift;
 }
 
@@ -103,8 +103,8 @@ data {
 
 parameters {
   simplex[n_structures] weights;
-  real<lower=0.0001> scale;
-  real boltzman_shift;
+  real<lower=0> scale;
+  real<lower=0> boltzman_shift;
 }
 
 model {
@@ -112,13 +112,13 @@ model {
   vector[m_measures] pred_css;
   vector[n_structures] alphas;
   boltzman_shift ~ uniform(0,300);
-  scale ~ uniform(0.0001,100);
+  scale ~ uniform(0,100);
   alphas = exp(-1.717472947*(boltzman_shift+energy_priors));
   weights ~ dirichlet(alphas);
   pred_saxs = sim_saxs * weights * scale;
   pred_css = sim_css * weights;
-  target_saxs ~ normal(pred_saxs, target_saxserr);
   target_cs ~ normal(pred_css, sim_cserr+target_cserr);
+  target_saxs ~ normal(pred_saxs, target_saxserr);
 }
 """
 
