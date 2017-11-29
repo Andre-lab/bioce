@@ -76,7 +76,7 @@ def execute_stan_EP(experimental, simulated, priors, iterations, chains, njobs):
     fig.subplots_adjust(wspace=0.8)
     fig.savefig("stan_weights_EP.png", dpi=300)
 
-    fig = fit.plot(pars="boltzman_shift")
+    fig = fit.plot(pars="boltzmann_shift")
     fig.subplots_adjust(wspace=0.8)
     fig.savefig("stan_boltzmann_EP.png", dpi=300)
 
@@ -123,7 +123,7 @@ def execute_stan_EP_CS(experimental, simulated, priors,
     fig.subplots_adjust(wspace=0.8)
     fig.savefig("stan_weights_EP_CS.png", dpi=300)
 
-    fig = fit.plot(pars="boltzman_shift")
+    fig = fit.plot(pars="boltzmann_shift")
     fig.subplots_adjust(wspace=0.8)
     fig.savefig("stan_boltzmann_EP_CS.png", dpi=300)
 
