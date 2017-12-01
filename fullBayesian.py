@@ -13,8 +13,9 @@ import optparse
 import numpy as np
 import pystan
 import psisloo
+import matplotlib.pyplot as plt
 
-from statistics import calculateChiCrysol, calculateChemShiftsChi, JensenShannonDiv
+from statistics import calculateChiCrysol, calculateChemShiftsChi, JensenShannonDiv, waic
 from stan_models import stan_code, stan_code_CS, stan_code_EP, stan_code_EP_CS, \
     psisloo_quanities
 
@@ -36,11 +37,18 @@ def execute_stan(experimental, simulated, priors, iterations, chains, njobs):
             "n_measures" : np.shape(experimental)[0],
             "n_structures" : np.shape(simulated)[1],
             "priors":priors}
+
     sm = pystan.StanModel(model_code=stan_code)
-    fit = sm.sampling(data=stan_dat, iter=iterations, chains=chains, n_jobs=njobs)
+    fit = sm.sampling(data=stan_dat, iter=iterations, chains=chains,
+                      n_jobs=njobs, sample_file="saved_samples.txt")
 
     fig = fit.plot(pars="weights")
-    fig.savefig("stan_weights.png")
+    fig.subplots_adjust(wspace=0.8)
+    fig.savefig("stan_weights.png", dpi=300)
+
+    fig = fit.plot(pars="scale")
+    fig.subplots_adjust(wspace=0.8)
+    fig.savefig("stan_scale.png", dpi=300)
 
     return fit
 
@@ -64,10 +72,20 @@ def execute_stan_EP(experimental, simulated, priors, iterations, chains, njobs):
             "n_structures" : np.shape(simulated)[1],
             "energy_priors":priors}
     sm = pystan.StanModel(model_code=stan_code_EP)
-    fit = sm.sampling(data=stan_dat, iter=iterations, chains=chains, n_jobs=njobs)
+    fit = sm.sampling(data=stan_dat, iter=iterations, chains=chains, n_jobs=njobs, sample_file="saved_samples.txt")
 
     fig = fit.plot(pars="weights")
-    fig.savefig("stan_weights_EP.png")
+    fig.subplots_adjust(wspace=0.8)
+    fig.savefig("stan_weights_EP.png", dpi=300)
+
+    fig = fit.plot(pars="boltzmann_shift")
+    fig.subplots_adjust(wspace=0.8)
+    fig.savefig("stan_boltzmann_EP.png", dpi=300)
+
+    fig = fit.plot(pars="scale")
+    fig.subplots_adjust(wspace=0.8)
+    fig.savefig("stan_scale_EP.png", dpi=300)
+
 
     return fit
 
@@ -101,10 +119,19 @@ def execute_stan_EP_CS(experimental, simulated, priors,
             "energy_priors":priors}
 
     sm = pystan.StanModel(model_code=stan_code_EP_CS)
-    fit = sm.sampling(data=stan_dat, iter=iterations, chains=chains, n_jobs=njobs)
+    fit = sm.sampling(data=stan_dat, iter=iterations, chains=chains, n_jobs=njobs, sample_file="saved_samples.txt")
 
     fig = fit.plot(pars="weights")
-    fig.savefig("stan_weights_EP_CS.png")
+    fig.subplots_adjust(wspace=0.8)
+    fig.savefig("stan_weights_EP_CS.png", dpi=300)
+
+    fig = fit.plot(pars="boltzmann_shift")
+    fig.subplots_adjust(wspace=0.8)
+    fig.savefig("stan_boltzmann_EP_CS.png", dpi=300)
+
+    fig = fit.plot(pars="scale")
+    fig.subplots_adjust(wspace=0.8)
+    fig.savefig("stan_scale_EP_CS.png", dpi=300)
 
     return fit
 
@@ -138,11 +165,15 @@ def execute_stan_CS(experimental, simulated, priors,
             "priors":priors}
 
     sm = pystan.StanModel(model_code=stan_code_CS)
-    fit = sm.sampling(data=stan_dat, iter=iterations, chains=chains, n_jobs=njobs)
+    fit = sm.sampling(data=stan_dat, iter=iterations, chains=chains, n_jobs=njobs, sample_file="saved_samples.txt")
 
     fig = fit.plot(pars="weights")
-    fig.savefig("stan_weights_CS.png")
+    fig.subplots_adjust(wspace=0.8)
+    fig.savefig("stan_weights_CS.png", dpi=300)
 
+    fig = fit.plot(pars="scale")
+    fig.subplots_adjust(wspace=0.8)
+    fig.savefig("stan_scale.png", dpi=300)
     return fit
 
 def execute_bws(experimental, simulated, priors, file_names, threshold,
@@ -173,7 +204,8 @@ def execute_bws(experimental, simulated, priors, file_names, threshold,
     post_loo = None
     last_loo = None
     model_comp_diff = 1
-    sm = pystan.StanModel(model_code=stan_code+psisloo_quanities)
+    sm = pystan.StanModel(model_code=stan_code+psisloo_quanities,
+                          iter=iterations, chains=chains, n_jobs=njobs)
 
     iteration = 0
     repeat_iteration = 0
@@ -193,17 +225,25 @@ def execute_bws(experimental, simulated, priors, file_names, threshold,
 
         #Calculating psis loo
         stan_chain=fit.extract()
-        current_loo = psisloo.psisloo(stan_chain['loglikes'])
-        log_file.write("greater than 0.5 ")
-        log_file.write(str(current_loo.print_summary()[0])+"\n")
-        log_file.write("greater than 1 ")
-        log_file.write(str(current_loo.print_summary()[1])+"\n")
-        if last_loo:
-            log_file.write("Model comparison: \n")
-            model_comp = psisloo.loo_compare(last_loo,current_loo)
-            model_comp_diff = model_comp['diff']
-            log_file.write(str(model_comp['diff'])+"\n")
-            log_file.write(str(model_comp['se_diff'])+"\n")
+
+        #If less than 100 models start psisloo otherwise waic
+        if n_structures < 100:
+            current_loo = psisloo.psisloo(stan_chain['loglikes'])
+            log_file.write("greater than 0.5 ")
+            log_file.write(str(current_loo.print_summary()[0])+"\n")
+            log_file.write("greater than 1 ")
+            log_file.write(str(current_loo.print_summary()[1])+"\n")
+            if last_loo:
+                log_file.write("Model comparison: \n")
+                model_comp = psisloo.loo_compare(last_loo,current_loo)
+                model_comp_diff = model_comp['diff']
+                log_file.write(str(model_comp['diff'])+"\n")
+                log_file.write(str(model_comp['se_diff'])+"\n")
+        else:
+            current_loo = waic(stan_chain['loglikes'])
+            model_comp_diff = current_loo - last_loo
+            log_file.write("WAIC model comparison: \n")
+            log_file.write(str(model_comp_diff+"\n"))
 
         #TODO check how many time condition has been met and exit if it doesn't improve over 5
         if last_loo and model_comp_diff < 0:
@@ -222,7 +262,8 @@ def execute_bws(experimental, simulated, priors, file_names, threshold,
         file_names = file_names[current_weights>threshold]
         #np.savetxt("fit.txt",fit.summary()['summary'][:,0],delimiter=" ")
         fig = fit.plot()
-        fig.savefig("stan_fit_"+str(iteration)+".png")
+        fig.subplots_adjust(wspace=0.8)
+        fig.savefig("stan_fit_"+str(iteration)+".png",  dpi=300)
         bayesian_weights, jsd, crysol_chi2 = calculate_stats(fit,
                                         experimental, simulated)
         log_file.write("JSD: "+str(jsd))
@@ -294,7 +335,13 @@ def calculate_stats(fit, experimental, simulated, cs_simulated=None,
     crysol_chi2 = calculateChiCrysol(np.dot(bayesian_weights,
                             np.transpose(simulated)), experimental[:,1],
                             experimental[:,2])
-    if cs_experimental.any() != None:
+    try:
+        if cs_experimental.any() != None:
+            chemical_shifts_on = True
+    except:
+        chemical_shifts_on = False
+
+    if chemical_shifts_on:
         chemshift_chi2 = calculateChemShiftsChi(np.dot(bayesian_weights,
                             np.transpose(cs_simulated)), cs_experimental[:,0],
                             cs_experimental[:,1], cs_rms)
