@@ -204,8 +204,7 @@ def execute_bws(experimental, simulated, priors, file_names, threshold,
     post_loo = None
     last_loo = None
     model_comp_diff = 1
-    sm = pystan.StanModel(model_code=stan_code+psisloo_quanities,
-                          iter=iterations, chains=chains, n_jobs=njobs)
+    sm = pystan.StanModel(model_code=stan_code+psisloo_quanities)
 
     iteration = 0
     repeat_iteration = 0
