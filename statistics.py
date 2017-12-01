@@ -61,3 +61,13 @@ def InfEntropy(weight):
 def JensenShannonDiv(weights_a, weights_b):
     jsd = InfEntropy((weights_a+weights_b)*0.5)-0.5*InfEntropy(weights_a)-0.5*InfEntropy(weights_b)
     return jsd
+
+def waic(log_lik):
+    """
+    Calculate the widely available information criterion
+    """
+    lppd =  np.sum(np.log(np.mean(np.exp(log_lik), axis=0)))
+
+    p_waic = np.sum(np.var(log_lik, axis=0))
+
+    return -2 * lppd + 2 * p_waic
