@@ -240,9 +240,10 @@ def execute_bws(experimental, simulated, priors, file_names, threshold,
                 log_file.write(str(model_comp['se_diff'])+"\n")
         else:
             current_loo = waic(stan_chain['loglikes'])
-            model_comp_diff = current_loo - last_loo
-            log_file.write("WAIC model comparison: \n")
-            log_file.write(str(model_comp_diff+"\n"))
+            if last_loo:
+                model_comp_diff = current_loo - last_loo
+                log_file.write("WAIC model comparison: \n")
+                log_file.write(str(model_comp_diff+"\n"))
 
         #TODO check how many time condition has been met and exit if it doesn't improve over 5
         if last_loo and model_comp_diff < 0:
