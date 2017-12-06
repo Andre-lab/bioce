@@ -203,6 +203,7 @@ def execute_bws(experimental, simulated, priors, file_names, threshold,
 
     post_loo = None
     last_loo = None
+    last_waic = None
     model_comp_diff = 1
     sm = pystan.StanModel(model_code=stan_code+psisloo_quanities)
 
@@ -239,9 +240,9 @@ def execute_bws(experimental, simulated, priors, file_names, threshold,
                 log_file.write(str(model_comp['diff'])+"\n")
                 log_file.write(str(model_comp['se_diff'])+"\n")
         else:
-            current_loo = waic(stan_chain['loglikes'])
-            if last_loo:
-                model_comp_diff = current_loo - last_loo
+            current_waic = waic(stan_chain['loglikes'])
+            if last_waic:
+                model_comp_diff = current_waic - last_waic
                 log_file.write("WAIC model comparison: \n")
                 log_file.write(str(model_comp_diff+"\n"))
 
@@ -249,11 +250,18 @@ def execute_bws(experimental, simulated, priors, file_names, threshold,
         if last_loo and model_comp_diff < 0:
             repeat_iteration += 1
             log_file.write("\nModel comp < 0 repeating iteration\n")
-            log_file.write("Repeating "+str(repeat_iteration)+" time\n")
+            log_file.write("Repeating PSIS-LOO "+str(repeat_iteration)+" time\n")
+            continue
+
+        if last_waic and model_comp_diff < 0:
+            repeat_iteration += 1
+            log_file.write("\nModel comp < 0 repeating iteration\n")
+            log_file.write("Repeating WAIC "+str(repeat_iteration)+" time\n")
             continue
 
         #Storing data for next simulation
         last_loo = current_loo
+        last_waic = current_waic
         repeat_iteration = 0
         current_weights = fit.summary()['summary'][:,0][:n_structures]
         sim_curves = sim_curves[:,current_weights>threshold]
