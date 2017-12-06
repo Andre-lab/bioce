@@ -260,8 +260,10 @@ def execute_bws(experimental, simulated, priors, file_names, threshold,
             continue
 
         #Storing data for next simulation
-        last_loo = current_loo
-        last_waic = current_waic
+        if n_structures < 100:
+            last_loo = current_loo
+        else:
+            last_waic = current_waic
         repeat_iteration = 0
         current_weights = fit.summary()['summary'][:,0][:n_structures]
         sim_curves = sim_curves[:,current_weights>threshold]
