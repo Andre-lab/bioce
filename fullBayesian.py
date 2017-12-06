@@ -244,7 +244,7 @@ def execute_bws(experimental, simulated, priors, file_names, threshold,
             if last_waic:
                 model_comp_diff = current_waic - last_waic
                 log_file.write("WAIC model comparison: \n")
-                log_file.write(str(model_comp_diff+"\n"))
+                log_file.write(str(model_comp_diff)+"\n")
 
         #TODO check how many time condition has been met and exit if it doesn't improve over 5
         if last_loo and model_comp_diff < 0:
@@ -351,6 +351,9 @@ def calculate_stats(fit, experimental, simulated, cs_simulated=None,
     except:
         chemical_shifts_on = False
 
+    scale = fit.summary(pars='scale')['summary'][0][0]
+    combine_curve(simulated,bayesian_weights,scale)
+
     if chemical_shifts_on:
         chemshift_chi2 = calculateChemShiftsChi(np.dot(bayesian_weights,
                             np.transpose(cs_simulated)), cs_experimental[:,0],
@@ -370,6 +373,17 @@ def read_file_safe(filename, dtype="float64"):
     except IOError as err:
         print(os.strerror(err.errno))
     return results
+
+def combine_curve(simulated, weights, scale):
+    """
+
+    :param simulated:
+    :param weights:
+    :param scale:
+    :return:
+    """
+    combined = scale*np.dot(weights, np.transpose(simulated))
+    np.savetxt("combinedCurve.txt", combined)
 
 if __name__=="__main__":
     doc = """
