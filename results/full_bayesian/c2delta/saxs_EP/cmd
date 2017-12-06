@@ -1,1 +1,1 @@
-python /Users/wojciechpotrzebowski/Documents/masaxs/bioce/fullBayesian.py -P energies -s TrmIntSub.txt -e 16_extrap_5concs-10p.dat -f file_list_sub.txt -j 4 -c 2 -i 4000
+python /Users/wojciechpotrzebowski/Documents/masaxs/bioce/fullBayesian.py -P energies3models -s TrmIntSub3models.txt -e 16_extrap_5concs-10p.dat -f file_list_sub3models.txt -j 4 -c 4 -i 4000
