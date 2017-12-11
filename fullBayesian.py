@@ -209,7 +209,7 @@ def execute_bws(experimental, simulated, priors, file_names, threshold,
 
     iteration = 0
     repeat_iteration = 0
-    while (model_comp_diff > 0 or repeat_iteration < 5):
+    while (model_comp_diff > 0 or repeat_iteration < 10):
         post_loo = last_loo
         log_file.write("Starting iteration "+str(iteration)+" with "
                    +str(n_structures)+" models\n")
@@ -227,7 +227,7 @@ def execute_bws(experimental, simulated, priors, file_names, threshold,
         stan_chain=fit.extract()
 
         #If less than 100 models start psisloo otherwise waic
-        if n_structures < 100:
+        if n_structures < 50:
             current_loo = psisloo.psisloo(stan_chain['loglikes'])
             log_file.write("greater than 0.5 ")
             log_file.write(str(current_loo.print_summary()[0])+"\n")
@@ -260,7 +260,7 @@ def execute_bws(experimental, simulated, priors, file_names, threshold,
             continue
 
         #Storing data for next simulation
-        if n_structures < 100:
+        if n_structures < 50:
             last_loo = current_loo
         else:
             last_waic = current_waic
