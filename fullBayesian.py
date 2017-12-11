@@ -217,7 +217,8 @@ def execute_bws(experimental, simulated, priors, file_names, threshold,
 
         post_loo = last_loo
         log_file.write("Starting iteration "+str(iteration)+" with "
-                   +str(n_structures)+" models and threshold of"+threshold+"\n")
+                    +str(n_structures)+" models and threshold of"
+                    +str(threshold)+"\n")
         stan_dat = {"sim_curves": sim_curves,
             "target_curve": target_curve,
             "target_errors": target_errors,
