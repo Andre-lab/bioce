@@ -201,6 +201,8 @@ def execute_bws(experimental, simulated, priors, file_names, threshold,
     alphas = priors
     log_file = open("full_bayesian.log","w")
 
+    structure_cutoff = 100
+
     post_loo = None
     last_loo = None
     last_waic = None
@@ -210,9 +212,12 @@ def execute_bws(experimental, simulated, priors, file_names, threshold,
     iteration = 0
     repeat_iteration = 0
     while (model_comp_diff > 0 or repeat_iteration < 10):
+        #TODO: Fix these if this scenario works
+        threshold = 0.1/(n_structures)
+
         post_loo = last_loo
         log_file.write("Starting iteration "+str(iteration)+" with "
-                   +str(n_structures)+" models\n")
+                   +str(n_structures)+" models and threshold of"+threshold+"\n")
         stan_dat = {"sim_curves": sim_curves,
             "target_curve": target_curve,
             "target_errors": target_errors,
@@ -227,7 +232,7 @@ def execute_bws(experimental, simulated, priors, file_names, threshold,
         stan_chain=fit.extract()
 
         #If less than 100 models start psisloo otherwise waic
-        if n_structures < 50:
+        if n_structures < structure_cutoff:
             current_loo = psisloo.psisloo(stan_chain['loglikes'])
             log_file.write("greater than 0.5 ")
             log_file.write(str(current_loo.print_summary()[0])+"\n")
@@ -260,7 +265,7 @@ def execute_bws(experimental, simulated, priors, file_names, threshold,
             continue
 
         #Storing data for next simulation
-        if n_structures < 50:
+        if n_structures < structure_cutoff:
             last_loo = current_loo
         else:
             last_waic = current_waic
