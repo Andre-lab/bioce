@@ -10,3 +10,4 @@ dependencies:
 - pip:
   - pystan
   - pandas
+  - git+https://github.com/emblsaxs/sasciftools.git
