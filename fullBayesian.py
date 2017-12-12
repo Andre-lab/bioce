@@ -358,7 +358,7 @@ def calculate_stats(fit, experimental, simulated, cs_simulated=None,
         chemical_shifts_on = False
 
     scale = fit.summary(pars='scale')['summary'][0][0]
-    combine_curve(simulated,bayesian_weights,scale)
+    combine_curve(experimental, simulated, bayesian_weights, scale)
 
     if chemical_shifts_on:
         chemshift_chi2 = calculateChemShiftsChi(np.dot(bayesian_weights,
@@ -380,7 +380,7 @@ def read_file_safe(filename, dtype="float64"):
         print(os.strerror(err.errno))
     return results
 
-def combine_curve(simulated, weights, scale):
+def combine_curve(experimental, simulated, weights, scale):
     """
 
     :param simulated:
@@ -388,8 +388,11 @@ def combine_curve(simulated, weights, scale):
     :param scale:
     :return:
     """
+    q_column = experimental[:,0]
+    exp_intensities = experimental[:,1]
+    exp_errors = experimental[:,2]
     combined = scale*np.dot(weights, np.transpose(simulated))
-    np.savetxt("combinedCurve.txt", combined)
+    np.savetxt("bayesianEstimateCurve.txt", np.transpose((q_column, exp_intensities, combined, exp_errors)))
 
 if __name__=="__main__":
     doc = """
