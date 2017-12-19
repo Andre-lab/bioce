@@ -11,10 +11,8 @@ import time
 import numpy as np
 
 
-def load_data(filename="98929.txt"):
-    data = np.loadtxt(filename, dtype=np.float64)
-
 def test_read_file_safe(filename, dtype="float64"):
+    data = np.loadtxt(filename, dtype=np.float64)
 
 def test_combine_curve(simulated, weights, scale):
 

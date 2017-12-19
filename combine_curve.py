@@ -23,6 +23,7 @@ def combine_curve(simulated, weights, scale):
     :return:
     """
     combuined = scale*np.dot(weights, np.transpose(simulated))
+
     return combuined
 
 if __name__ == "__main__":
@@ -39,6 +40,8 @@ if __name__ == "__main__":
                       help="Posterior weights [OBLIGATORY]")
     parser.add_option("-s", "--simulated", dest="simulated_file",
                       help="Simulated SAXS curves [OBLIGATORY]")
+    parser.add_option("-e", "--experimenttal", dest="experimental_file",
+                      help="Simulated SAXS curves [OBLIGATORY]")
     parser.add_option("-k", "--scale", dest="scale", default=1,
                   type='float',
                   help="scaling factor")
@@ -46,5 +49,7 @@ if __name__ == "__main__":
     scale = options.scale
     weights = read_file_safe(options.weights)
     simulated = read_file_safe(options.simulated_file)
+    experimental = read_file_safe(options.experimental_file)
     combined = combine_curve(simulated, weights, scale)
-    np.savetxt("combinedCurve.txt", combined)
+    q_column = experimental[:,0]
+    np.savetxt("combinedCurveqIq.txt", np.transpose((q_column, combined)))

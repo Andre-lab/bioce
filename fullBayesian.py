@@ -358,6 +358,7 @@ def calculate_stats(fit, experimental, simulated, cs_simulated=None,
         chemical_shifts_on = False
 
     scale = fit.summary(pars='scale')['summary'][0][0]
+    print("Scale from summary", scale)
     combine_curve(experimental, simulated, bayesian_weights, scale)
 
     if chemical_shifts_on:
@@ -392,7 +393,8 @@ def combine_curve(experimental, simulated, weights, scale):
     exp_intensities = experimental[:,1]
     exp_errors = experimental[:,2]
     combined = scale*np.dot(weights, np.transpose(simulated))
-    np.savetxt("bayesianEstimateCurve.txt", np.transpose((q_column, exp_intensities, combined, exp_errors)))
+    np.savetxt("bayesianEstimateCurve.txt",
+               np.transpose((q_column, exp_intensities, combined, exp_errors)))
 
 if __name__=="__main__":
     doc = """
