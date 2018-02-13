@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 
 from statistics import calculateChiCrysol, calculateChemShiftsChi, JensenShannonDiv, waic
 from stan_models import stan_code, stan_code_CS, stan_code_EP, stan_code_EP_CS, \
-    psisloo_quanities
+    psisloo_quanities, posterior_predict_quanities
 
 def execute_stan(experimental, simulated, priors, iterations, chains, njobs):
     """
@@ -38,7 +38,7 @@ def execute_stan(experimental, simulated, priors, iterations, chains, njobs):
             "n_structures" : np.shape(simulated)[1],
             "priors":priors}
 
-    sm = pystan.StanModel(model_code=stan_code)
+    sm = pystan.StanModel(model_code=stan_code+posterior_predict_quanities)
     fit = sm.sampling(data=stan_dat, iter=iterations, chains=chains,
                       n_jobs=njobs, sample_file="saved_samples.txt")
 
@@ -50,6 +50,7 @@ def execute_stan(experimental, simulated, priors, iterations, chains, njobs):
     fig.subplots_adjust(wspace=0.8)
     fig.savefig("stan_scale.png", dpi=300)
 
+    np.savetxt("target_curve_full.csv", fit.summary()['summary'][-869:-1][:,0])
     return fit
 
 

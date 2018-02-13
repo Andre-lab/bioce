@@ -14,8 +14,8 @@ parameters {
 }
 
 model {
-  vector[n_measures] pred_curve;
   vector[n_structures] alphas;
+  vector[n_measures] pred_curve;
   alphas = priors;
   scale ~ uniform(0,100);
   weights ~ dirichlet(alphas);
@@ -119,6 +119,16 @@ model {
   pred_css = sim_css * weights;
   target_cs ~ normal(pred_css, sim_cserr+target_cserr);
   target_saxs ~ normal(pred_saxs, target_saxserr);
+}
+"""
+posterior_predict_quanities = """
+generated quantities {
+    vector[n_measures] pred_curve;
+    vector[n_measures] target_curve_tilde;
+    pred_curve = sim_curves * weights * scale;
+    for (i in 1:n_measures) {
+        target_curve_tilde[i] = normal_rng(pred_curve[i], target_errors[i]);
+    }
 }
 """
 
