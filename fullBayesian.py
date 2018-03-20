@@ -38,10 +38,14 @@ def execute_stan(experimental, simulated, priors, iterations, chains, njobs):
             "n_structures" : np.shape(simulated)[1],
             "priors":priors}
 
-    sm = pystan.StanModel(model_code=stan_code+posterior_predict_quanities)
-    fit = sm.sampling(data=stan_dat, iter=iterations, chains=chains,
-                      n_jobs=njobs, sample_file="saved_samples.txt")
-
+    #sm = pystan.StanModel(model_code=stan_code+posterior_predict_quanities)
+    sm = pystan.StanModel(model_code=stan_code)
+    #fit = sm.sampling(data=stan_dat, iter=iterations, chains=chains,
+    #                  n_jobs=njobs, sample_file="saved_samples.txt")
+    initial_values = [{"weight[0]":0.05, "weight[1]":0.1, "weight[2]":0.15,
+                       "weight[3]":0.3, "weight[4]":0.4, "scale":1}]
+    fit = sm.optimizing(data=stan_dat, init=initial_values, algorithm="BFGS")
+    print(fit)
     fig = fit.plot(pars="weights")
     fig.subplots_adjust(wspace=0.8)
     fig.savefig("stan_weights.png", dpi=300)
@@ -50,7 +54,7 @@ def execute_stan(experimental, simulated, priors, iterations, chains, njobs):
     fig.subplots_adjust(wspace=0.8)
     fig.savefig("stan_scale.png", dpi=300)
 
-    np.savetxt("target_curve_full.csv", fit.summary()['summary'][-869:-1][:,0])
+    #np.savetxt("target_curve_full.csv", fit.summary()['summary'][-869:-1][:,:2])
     return fit
 
 

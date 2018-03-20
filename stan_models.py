@@ -10,14 +10,15 @@ data {
 
 parameters {
   simplex[n_structures] weights;
-  real<lower=0> scale;
+  real scale;
 }
 
 model {
   vector[n_structures] alphas;
   vector[n_measures] pred_curve;
   alphas = priors;
-  scale ~ uniform(0,100);
+  //scale ~ uniform(0,2);
+  scale ~ lognormal(0.8,0.4);
   weights ~ dirichlet(alphas);
   pred_curve = sim_curves * weights * scale;
   target_curve ~ normal(pred_curve, target_errors);
@@ -127,7 +128,7 @@ generated quantities {
     vector[n_measures] target_curve_tilde;
     pred_curve = sim_curves * weights * scale;
     for (i in 1:n_measures) {
-        target_curve_tilde[i] = normal_rng(pred_curve[i], target_errors[i]);
+        target_curve_tilde[i] = cauchy_rng(pred_curve[i], target_errors[i]);
     }
 }
 """
