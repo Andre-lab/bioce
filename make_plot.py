@@ -36,10 +36,8 @@ def make_plot(data, data_name, log=False):
     #intensities = data[:,1:]
 
     intensities = data[:,1]
-    line1, = plt.plot(qvector, intensities, '-o', label='energy prior(on)')
-    intensities = data[:,2]
-    line2, = plt.plot(qvector, intensities, '-o', label='energy prior(off)')
-    plt.legend(handles=[line1, line2])
+    line1, = plt.plot(qvector, intensities, '-o')
+    #plt.legend(handles=[line1])
     #if log:
     #    plt.semilogy(qvector, intensities, 'g-', linewidth=1.5)
     #else:
@@ -48,10 +46,8 @@ def make_plot(data, data_name, log=False):
 
     #plt.ylabel("$log(Intenisty)$")
     #plt.xlabel("$q [\AA]$")
-    plt.ylabel("Number of models recovered")
+    plt.ylabel("RMSD")
     plt.xlabel("Noise $(\sigma)$")
-    yint = [3, 4, 5]
-    plt.yticks(yint)
     plt.savefig(data_name+".png", dpi=600)
     plt.show()
 
