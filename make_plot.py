@@ -33,14 +33,21 @@ def make_plot(data, data_name, log=False):
     :return:
     """
     qvector = data[:,0]
-    intensities = data[:,1:]
-    if log:
-        plt.semilogy(qvector, intensities, 'g-', linewidth=1.5)
-    else:
-        plt.plot(qvector, intensities, 'g-', linewidth=1.5)
+    #intensities = data[:,1:]
 
-    plt.ylabel("$log(Intenisty)$")
-    plt.xlabel("$q [\AA]$")
+    intensities = data[:,1]
+    line1, = plt.plot(qvector, intensities, '-o')
+    #plt.legend(handles=[line1])
+    #if log:
+    #    plt.semilogy(qvector, intensities, 'g-', linewidth=1.5)
+    #else:
+    #    plt.plot(qvector, intensities, '-o')
+    #    #plt.plot(qvector, intensities, 'k-', linewidth=1)
+
+    #plt.ylabel("$log(Intenisty)$")
+    #plt.xlabel("$q [\AA]$")
+    plt.ylabel("RMSD")
+    plt.xlabel("Noise $(\sigma)$")
     plt.savefig(data_name+".png", dpi=600)
     plt.show()
 
@@ -66,10 +73,9 @@ if __name__=="__main__":
 
     parser.add_option("-d", "--data", dest="data_file", default=None,
                       help="Data file containing qvec, intensities [OBLIGATORY]")
-    parser.add_option("-c", "--chains", dest="chains",default = 4,
-                      type = 'int',
-                      help="Number of chains")
     options, args = parser.parse_args()
 
-    njobs = options.njobs
+    data_file = options.data_file
+    data = read_file_safe(data_file)
+    make_plot(data, data_file)
 
