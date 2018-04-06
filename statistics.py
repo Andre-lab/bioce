@@ -62,6 +62,31 @@ def JensenShannonDiv(weights_a, weights_b):
     jsd = InfEntropy((weights_a+weights_b)*0.5)-0.5*InfEntropy(weights_a)-0.5*InfEntropy(weights_b)
     return jsd
 
+def mean_for_weights(fit):
+    """
+    Calculation mean weight from stan fitting object
+    :param fit: stan fit model
+    :return:
+    """
+    stan_chain = fit.extract()
+    weights = stan_chain["weights"]
+    vlen = np.shape(weights)
+    mean_weights = []
+    for ind in range(vlen[1]):
+        mean_weights.append(np.mean(weights[:,ind]))
+    return mean_weights
+
+def me_log_lik(fit):
+    """
+    Calculates model evidence from log likelihood calculations
+    :param log_lik:
+    :return:
+    """
+    stan_chain = fit.extract()
+    log_lik = stan_chain["loglikes"]
+    return np.sum(np.mean(log_lik, axis=1))
+
+
 def waic(log_lik):
     """
     Calculate the widely available information criterion

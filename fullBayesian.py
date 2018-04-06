@@ -15,7 +15,7 @@ import pystan
 import psisloo
 import matplotlib.pyplot as plt
 
-from statistics import calculateChiCrysol, calculateChemShiftsChi, JensenShannonDiv, waic
+from statistics import calculateChiCrysol, calculateChemShiftsChi, JensenShannonDiv, waic, mean_for_weights, me_log_lik
 from stan_models import stan_code, stan_code_CS, stan_code_EP, stan_code_EP_CS, \
     psisloo_quanities, posterior_predict_quanities
 
@@ -38,14 +38,15 @@ def execute_stan(experimental, simulated, priors, iterations, chains, njobs):
             "n_structures" : np.shape(simulated)[1],
             "priors":priors}
 
-    #sm = pystan.StanModel(model_code=stan_code+posterior_predict_quanities)
-    sm = pystan.StanModel(model_code=stan_code)
-    #fit = sm.sampling(data=stan_dat, iter=iterations, chains=chains,
-    #                  n_jobs=njobs, sample_file="saved_samples.txt")
-    initial_values = [{"weight[0]":0.05, "weight[1]":0.1, "weight[2]":0.15,
-                       "weight[3]":0.3, "weight[4]":0.4, "scale":1}]
-    fit = sm.optimizing(data=stan_dat, init=initial_values, algorithm="BFGS")
-    print(fit)
+    sm = pystan.StanModel(model_code=stan_code+psisloo_quanities)
+    #sm = pystan.StanModel(model_code=stan_code)
+    fit = sm.sampling(data=stan_dat, iter=iterations, chains=chains,
+                      n_jobs=njobs, sample_file="saved_samples.txt")
+
+    #initial_values = [{"weight[0]":0.05, "weight[1]":0.1, "weight[2]":0.15,
+    #                   "weight[3]":0.3, "weight[4]":0.4, "scale":1}]
+    #fit = sm.optimizing(data=stan_dat, init=initial_values, algorithm="BFGS")
+
     fig = fit.plot(pars="weights")
     fig.subplots_adjust(wspace=0.8)
     fig.savefig("stan_weights.png", dpi=300)
@@ -504,4 +505,6 @@ if __name__=="__main__":
                 print(fname,bayesian_weights[index])
             print("JSD: "+str(jsd))
             print("Chi2 SAXS:"+str(crysol_chi2))
+            #print("Mean weights", mean_for_weights(fit))
+            print("ME log lik", me_log_lik(fit))
         print(fit)
