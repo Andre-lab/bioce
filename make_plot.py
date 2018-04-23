@@ -79,8 +79,10 @@ def make_residue_plot(data, combined_data, data_name, log=False):
     """
     qvector = data[:,0]
     exp_intensities = data[:,1]
+    exp_errors = data[:,2]
     sim_intensities = combined_data
     line1, = plt.plot(qvector, exp_intensities - sim_intensities, 'o')
+    #plt.fill_between(qvector, -exp_errors, exp_errors, color='lightyellow')
     #plt.legend(handles=[line1])
     plt.ylabel("Residuals")
     plt.xlabel("$q[\AA]$")
