@@ -51,6 +51,38 @@ def make_plot(data, data_name, log=False):
     plt.savefig(data_name+".png", dpi=600)
     plt.show()
 
+def make_intensity_plot(data, simulated_data, log=False):
+    """
+    Produces plot given the data
+    :param data:
+    :param log:
+    :return:
+    """
+    qvector = data[:,0]
+    exp_intensities = data[:,1]
+    exp_errors = data[:,2]
+    sim_intensities = simulated_data[:,1]
+
+    plt.semilogy(qvector, exp_intensities, 'ko', markersize=4, mfc="none")
+    plt.errorbar(qvector, exp_intensities, yerr=exp_errors,  fmt='k',linewidth=1, markersize=1)
+    plt.semilogy(qvector, sim_intensities, 'o', markersize=3)
+    #plt.legend(handles=[line1])
+    #if log:
+    #    plt.semilogy(qvector, exp_intensities, 'g-', linewidth=1.5)
+    #    plt.semilogy(qvector, sim_intensities, 'g-', linewidth=1.5)
+    #else:
+    #    plt.plot(qvector, sim_intensities, 'o')
+    #    plt.plot(qvector, exp_intensities, 'o')
+    #    #plt.plot(qvector, intensities, 'k-', linewidth=1)
+
+    plt.ylabel("$log(Intenisty)$")
+    plt.xlabel("$q [\AA^{-1}]$")
+    #plt.ylabel("RMSD")
+    #plt.xlabel("Noise $(\sigma)$")
+    plt.savefig("SASfit.png", dpi=600)
+    plt.show()
+
+
 def make_bar_plot(data, data_name):
     """
     Creatiing bar chart
@@ -81,11 +113,11 @@ def make_residue_plot(data, combined_data, data_name, log=False):
     exp_intensities = data[:,1]
     exp_errors = data[:,2]
     sim_intensities = combined_data
-    line1, = plt.plot(qvector, exp_intensities - sim_intensities, 'o')
+    line1, = plt.plot(qvector, (exp_intensities - sim_intensities)/exp_errors, 'o')
     #plt.fill_between(qvector, -exp_errors, exp_errors, color='lightyellow')
     #plt.legend(handles=[line1])
-    plt.ylabel("Residuals")
-    plt.xlabel("$q[\AA]$")
+    plt.ylabel("$\Delta/\sigma$")
+    plt.xlabel("$q[\AA^{-1}]$")
     plt.savefig(data_name+".png", dpi=600)
     plt.show()
 if __name__=="__main__":
@@ -110,5 +142,5 @@ if __name__=="__main__":
     combined_data_file = options.combined_data_file
     data = read_file_safe(data_file)
     combined_data = read_file_safe(combined_data_file)
-    make_residue_plot(data, combined_data, data_file)
+    make_intensity_plot(data, combined_data, data_file)
 
