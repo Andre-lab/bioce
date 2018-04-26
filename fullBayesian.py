@@ -14,6 +14,7 @@ import numpy as np
 import pystan
 import psisloo
 import matplotlib.pyplot as plt
+import stan_utility
 
 from statistics import calculateChiCrysol, calculateChemShiftsChi, JensenShannonDiv, waic
 from stan_models import stan_code, stan_code_CS, stan_code_EP, stan_code_EP_CS, \
@@ -505,3 +506,8 @@ if __name__=="__main__":
             print("JSD: "+str(jsd))
             print("Chi2 SAXS:"+str(crysol_chi2))
         print(fit)
+
+        #And soem stan utilitry stats
+        stan_utility.check_treedepth(fit)
+        stan_utility.check_energy(fit)
+        stan_utility.check_div(fit)

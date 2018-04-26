@@ -48,6 +48,7 @@ parameters {
 model {
   vector[n_measures] pred_saxs;
   vector[m_measures] pred_css;
+  vector[m_measures] cs_errors;
   vector[n_structures] alphas;
   scale ~ uniform(0,100);
   alphas = priors;
@@ -55,7 +56,10 @@ model {
   pred_saxs = sim_saxs * weights * scale;
   pred_css = sim_css * weights;
   target_saxs ~ normal(pred_saxs, target_saxserr);
-  target_cs ~ normal(pred_css, sim_cserr+target_cserr);
+  for (i in 1:m_measures) {
+    cs_errors[i] = pow(pow(sim_cserr[i],2)+pow(target_cserr[i],2),0.5);
+  }
+  target_cs ~ normal(pred_css, cs_errors);
 }
 """
 
@@ -111,6 +115,7 @@ parameters {
 model {
   vector[n_measures] pred_saxs;
   vector[m_measures] pred_css;
+  vector[m_measures] cs_errors;
   vector[n_structures] alphas;
   boltzmann_shift ~ uniform(0,300);
   scale ~ uniform(0,100);
@@ -118,7 +123,10 @@ model {
   weights ~ dirichlet(alphas);
   pred_saxs = sim_saxs * weights * scale;
   pred_css = sim_css * weights;
-  target_cs ~ normal(pred_css, sim_cserr+target_cserr);
+  for (i in 1:m_measures) {
+    cs_errors[i] = pow(pow(sim_cserr[i],2)+pow(target_cserr[i],2),0.5);
+  }
+  target_cs ~ normal(pred_css, cs_errors);
   target_saxs ~ normal(pred_saxs, target_saxserr);
 }
 """
