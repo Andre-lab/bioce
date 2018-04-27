@@ -64,8 +64,8 @@ def make_intensity_plot(data, simulated_data, log=False):
     sim_intensities = simulated_data[:,1]
 
     plt.semilogy(qvector, exp_intensities, 'ko', markersize=4, mfc="none")
-    plt.errorbar(qvector, exp_intensities, yerr=exp_errors,  fmt='k',linewidth=1, markersize=1)
-    plt.semilogy(qvector, sim_intensities, 'o', markersize=3)
+    plt.errorbar(qvector, exp_intensities, yerr=exp_errors,  fmt='k',linewidth=1, alpha=.5)
+    plt.semilogy(qvector, sim_intensities, 'o', markersize=3, alpha=0.5)
     #plt.legend(handles=[line1])
     #if log:
     #    plt.semilogy(qvector, exp_intensities, 'g-', linewidth=1.5)
