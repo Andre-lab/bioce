@@ -11,6 +11,7 @@ import os
 import optparse
 
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 
 def read_file_safe(filename, dtype="float64"):
@@ -58,14 +59,18 @@ def make_intensity_plot(data, simulated_data, log=False):
     :param log:
     :return:
     """
+    matplotlib.rcParams.update({'font.size': 18})
+
     qvector = data[:,0]
     exp_intensities = data[:,1]
     exp_errors = data[:,2]
     sim_intensities = simulated_data[:,1]
 
-    plt.semilogy(qvector, exp_intensities, 'ko', markersize=4, mfc="none")
-    plt.errorbar(qvector, exp_intensities, yerr=exp_errors,  fmt='k',linewidth=1, alpha=.5)
-    plt.semilogy(qvector, sim_intensities, 'o', markersize=3, alpha=0.5)
+    #plt.plot(qvector, exp_intensities, 'ko', markersize=4, mfc="none")
+    plt.errorbar(qvector, exp_intensities, yerr=exp_errors, fmt="ko", markersize=4, alpha=0.4, mfc="none")
+    plt.plot(qvector, sim_intensities, 'o', markersize=5)
+    plt.yscale('log')
+
     #plt.legend(handles=[line1])
     #if log:
     #    plt.semilogy(qvector, exp_intensities, 'g-', linewidth=1.5)
@@ -79,26 +84,28 @@ def make_intensity_plot(data, simulated_data, log=False):
     plt.xlabel("$q [\AA^{-1}]$")
     #plt.ylabel("RMSD")
     #plt.xlabel("Noise $(\sigma)$")
-    plt.savefig("SASfit.png", dpi=600)
+    #plt.figure(figsize=(8, 6))
+    plt.savefig("SASfit.png", dpi=300, bbox_inches='tight')
     plt.show()
 
 
-def make_bar_plot(data, data_name):
+def make_bar_plot():
     """
     Creatiing bar chart
     :param data:
     :param data_name:
     :return:
     """
+    matplotlib.rcParams.update({'font.size': 22})
     xvalues = [1,3,5]
     heights = [0.424346, 0.54757, 0.476754]
-    widhts = [1.8, 1.8, 1.8]
+    widhts = [1.4, 1.4, 1.4]
     fig, ax = plt.subplots(1, 1)
-    plt.bar(xvalues, heights, widhts)
+    plt.bar(xvalues, heights, widhts, linewidth=3, edgecolor='orange', color='None')
     ax.set_ylabel("Model Evidence")
     ax.set_xticks(xvalues)
     ax.set_xticklabels(['2models', '3models', '4models'])
-    fig.savefig(data_name+".png", dpi=600)
+    fig.savefig("bar_plot.png", dpi=600, bbox_inches='tight')
     plt.show()
 def make_residue_plot(data, combined_data, data_name, log=False):
     """
@@ -142,5 +149,5 @@ if __name__=="__main__":
     combined_data_file = options.combined_data_file
     data = read_file_safe(data_file)
     combined_data = read_file_safe(combined_data_file)
-    make_intensity_plot(data, combined_data, data_file)
-
+    #make_intensity_plot(data, combined_data, data_file)
+    make_bar_plot()
