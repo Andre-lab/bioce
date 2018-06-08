@@ -39,8 +39,8 @@ def execute_stan(experimental, simulated, priors, iterations, chains, njobs):
             "n_structures" : np.shape(simulated)[1],
             "priors":priors}
 
-    sm = pystan.StanModel(model_code=stan_code+psisloo_quanities)
-    #sm = pystan.StanModel(model_code=stan_code)
+    #sm = pystan.StanModel(model_code=stan_code+psisloo_quanities)
+    sm = pystan.StanModel(model_code=stan_code)
     fit = sm.sampling(data=stan_dat, iter=iterations, chains=chains,
                       n_jobs=njobs, sample_file="saved_samples.txt")
 
@@ -49,6 +49,7 @@ def execute_stan(experimental, simulated, priors, iterations, chains, njobs):
     #fit = sm.optimizing(data=stan_dat, init=initial_values, algorithm="BFGS")
 
     fig = fit.plot(pars="weights")
+    #ax.set_color_cycle(['red', 'black', 'yellow', 'green', 'blue'])
     fig.subplots_adjust(wspace=0.8)
     fig.savefig("stan_weights.png", dpi=300)
 
@@ -128,7 +129,8 @@ def execute_stan_EP_CS(experimental, simulated, priors,
     sm = pystan.StanModel(model_code=stan_code_EP_CS)
     fit = sm.sampling(data=stan_dat, iter=iterations, chains=chains, n_jobs=njobs, sample_file="saved_samples.txt")
 
-    fig = fit.plot(pars="weights")
+    fig, ax = fit.plot(pars="weights")
+    ax.set_color_cycle(['red', 'black', 'yellow', 'green'])
     fig.subplots_adjust(wspace=0.8)
     fig.savefig("stan_weights_EP_CS.png", dpi=300)
 
@@ -507,7 +509,7 @@ if __name__=="__main__":
             print("JSD: "+str(jsd))
             print("Chi2 SAXS:"+str(crysol_chi2))
             #print("Mean weights", mean_for_weights(fit))
-            print("ME log lik", me_log_lik(fit))
+            #print("ME log lik", me_log_lik(fit))
         print(fit)
 
         #And soem stan utilitry stats
