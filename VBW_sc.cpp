@@ -445,8 +445,7 @@ void run_vbw(const int &again, const int &k, const std::string &pre_weight_file,
 	double energy_current, energy_min;
 	double *saxs_mix; 
 	double *cs_mix;
-	float acceptance_rate = 1.0;
-    bool rosettaPrior = false;
+	bool rosettaPrior = false;
     bool chemicalShiftsOn = false;
     bool saxsOn = true;
  	if (std::strcmp(chemical_shifts_file.c_str(),"None")!=0) {
@@ -651,7 +650,7 @@ void run_vbw(const int &again, const int &k, const std::string &pre_weight_file,
 		//Define params before equilibration and after for next rounds
 		gsl_siman_solve(r, simAnBlock, L_function, L_take_step, L_distance, NULL,
 		 	block_copy, block_copy_construct, block_destroy,                
-            0, params, &acceptance_rate);
+            0, params);
 
 		alpha_zero = 0.0;
 		for (int i=0; i < k; i++) {
@@ -825,7 +824,7 @@ void run_vbw(const int &again, const int &k, const std::string &pre_weight_file,
 		//alphas are used from the previous simulation 
 		gsl_siman_solve(r, simAnBlock, L_function, L_take_step, L_distance, NULL,
                   		block_copy, block_copy_construct, block_destroy, 
-                  		0, params, &acceptance_rate);
+                  		0, params);
 
 		energy_current = L_function(simAnBlock);
 
