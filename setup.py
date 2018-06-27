@@ -8,8 +8,8 @@ import sys
 import os
 from distutils.core import setup, Extension
 
-os.environ["CC"] = "g++-5"
-os.environ["CXX"] = "g++-5"
+os.environ["CC"] = "clang"
+os.environ["CXX"] = "clang"
 
 is_64bits = sys.maxsize > 2**32
 enable_openmp = False
@@ -27,10 +27,10 @@ if sys.platform == 'darwin':
             print("PROBLEM determining Darwin version")
 
 extensions = [Extension('_vbwSC', ["vbw_sc.i", "VBW_sc.cpp"],
-                             swig_opts=["-I/usr/include/python2.7"],
-                             extra_compile_args= ["-shared", "-fpic", "-fopenmp",
+                             swig_opts=["-c++","-I/usr/include/python2.7"],
+                             extra_compile_args= ["-fpic", "-fopenmp",
                                               "-O3", "-std=c++11" ],
-                             libraries =[ "lgsl", "lgslcblas", "lm"]
+                             libraries =[ "gsl", "gslcblas", "m"]
                              )]
 
 setup(name = "bioce",

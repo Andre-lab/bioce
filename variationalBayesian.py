@@ -39,7 +39,7 @@ if __name__=="__main__":
         Python interface to Variational Bayesian algorithm
         Usage: python runVBW.py --help
     """
-    print doc
+    print(doc)
     usage = "usage: %prog [options] args"
     option_parser_class = optparse.OptionParser
     parser = option_parser_class( usage = usage, version='0.1' )
