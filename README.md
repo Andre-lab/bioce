@@ -55,9 +55,7 @@ a file with starting weights and a list of files is generated. These files are n
 to run Bayesian inference in the next step.
 
 2. Run variational Bayesian inference
-
 Once you prepare input files as described in step 1, you can run model selection using variational Bayesian inference:
-
 ```
 python ../variationalBayesian.py -p flat_weights5models.txt -s TrmSimulatedIntensities5models.dat -e synthetic_60p.dat -f names5models.txt
 ```
