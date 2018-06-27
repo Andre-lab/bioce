@@ -11,7 +11,7 @@ __email__ = "Wojciech.Potrzebowski@biochemistry.lu.se"
 import optparse
 import vbwSC
 
-def produce_output(output, file_list):
+def produce_final_output(output, file_list):
     #1. Match file list with weight list
     logfile = open(output+".log","w")
     output_lines = open(output).readlines()
@@ -92,4 +92,4 @@ if __name__=="__main__":
                   options.output, options.nprocs, options.weight_cut, options.skip_vbw,\
                   options.cs_simulated, options.cs_rms, options.cs_experimental)
 
-    produce_output(options.output, options.file_list)
+    produce_final_output(options.output, options.file_list)

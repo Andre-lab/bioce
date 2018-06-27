@@ -4,10 +4,7 @@ Unit tests for full Bayesian analysis including:
 2) and combining output
 """
 from __future__ import division, print_function
-
 import unittest
-import time
-
 import numpy as np
 
 

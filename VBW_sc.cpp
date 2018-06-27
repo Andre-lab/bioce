@@ -371,12 +371,11 @@ void calculate_alpha_priors(gsl_vector* rosetta_engeries,
     double energy_sum = 0.0;
     double kBT = 0.0019872041*293;
 
-    for( int j = 0; j< L; j++) {
-        energy_sum += exp(-gsl_vector_get(rosetta_engeries,j)/kBT);
-    }
+    //for( int j = 0; j< L; j++) {
+    //    energy_sum += exp(-gsl_vector_get(rosetta_engeries,j)/kBT);
+    //}
 
     for( int j = 0; j< L; j++) {
-        //double alpha = (exp(-(c_ref + gsl_vector_get(rosetta_engeries,j))/kBT));
         double alpha = exp(-(gsl_vector_get(rosetta_engeries,j))/kBT);
         gsl_vector_set(alpha_priors,j,alpha);
     }
