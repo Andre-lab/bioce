@@ -18,11 +18,15 @@ git clone https://github.com/Andre-lab/bioce.git
 cd bioce
 conda env create -f bioce.yml
 ```
-4.	Build and install software (use –user flag if you want to install it for just single user)
+4. Activate conda enviroment
+```
+source activate bioce
+```
+5.	Build and install software (use –user flag if you want to install it for just single user)
 ```
 python setup.py install
 ```
-5. Check if scripts start up
+6. Check if scripts start up
 ```
 python variationalBayesian.py –help
 python fullBayesian.py --help
