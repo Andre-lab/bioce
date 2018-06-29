@@ -37,7 +37,7 @@ def produce_final_output(output, file_list):
 if __name__=="__main__":
     doc = """
         Python interface to Variational Bayesian algorithm
-        Usage: python runVBW.py --help
+        Usage: python variationalBayesian --help
     """
     print(doc)
     usage = "usage: %prog [options] args"
