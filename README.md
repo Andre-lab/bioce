@@ -50,7 +50,12 @@ We assume here that you have generated set of structural models and you have exp
 You can refer to The typical workflow may look as follows.
 
 1. Run script to generate scattering curves
-This requires foxs to be installed and avaialable through PATH
+This requires FoXS to be installed and avaialable through PATH.
+Since you have already installed anaconda on your machine,
+the easiest way to obtain FoXS is to follow installation guide for IMP (which FoXS is part of)
+at: [IMP installation](https://integrativemodeling.org/download-anaconda.html)
+
+Once FoXS is installed, simply run:
 ```
 prepareBayesian.py -s strcuture_lib_dir -e experimental_data
 ```
