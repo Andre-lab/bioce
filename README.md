@@ -36,12 +36,38 @@ If you see no errors but options menu pops up, you are good to go.
 ## Running examples
 
 ### Simple run example
-The simple example for running variational and full Bayesian approach with all necessary input files can be found in data folder
+1. The simple example for running complete Bayesian approach with all necessary input files can be found in data folder
 ```
 cd data
-python ../fullBayesian.py -p flat_weights5models.txt -s TrmSimulatedIntensities5models.dat -e synthetic_60p.dat -f names5models.txt
+python ../fullBayesian.py -p weights.txt -s SimulatedIntensities.txt -e simulated.dat -f structures.txt
 ```
-After running both variational and complete Bayesian inference you should get simillar results.
+2. You should get simillar output to the one bellow:
+```
+             mean se_mean     sd   2.5%    25%    50%    75%  97.5%  n_eff   Rhat
+weights[0]   0.03  4.7e-3   0.05 1.9e-9 2.2e-4 7.0e-3   0.05   0.18    105   1.04
+weights[1]   0.09  2.0e-3   0.02   0.05   0.08   0.09   0.11   0.14    128   1.03
+weights[2]   0.15  3.8e-3   0.04   0.06   0.12   0.15   0.18   0.23    128   1.02
+weights[3]   0.33  6.5e-3   0.07   0.17   0.29   0.33   0.38   0.46    118   1.03
+weights[4]   0.39  1.4e-3   0.02   0.37   0.38   0.39    0.4   0.43    118   1.03
+scale        1.02  5.2e-3   0.06   0.91   0.99   1.03   1.06   1.14    115   1.03
+lp__       -14.25    0.15   1.79 -18.95 -15.12 -13.86 -12.94 -11.94    134   1.03
+
+Samples were drawn using NUTS at Fri Jun 29 10:02:35 2018.
+For each parameter, n_eff is a crude measure of effective sample size,
+and Rhat is the potential scale reduction factor on split chains (at
+convergence, Rhat=1).
+878 of 4000 iterations saturated the maximum tree depth of 10 (21.95%)
+  Run again with max_depth set to a larger value to avoid saturation
+E-BFMI indicated no pathological behavior
+522.0 of 4000 iterations ended with a divergence (13.05%)
+  Try running with larger adapt_delta to remove the divergences
+```
+3. Script also produces two images stan_weights.png and stan_scale.png,
+which graphically ilustrated distribution of population weights (shown below) and scaling parameter
+![Alt text](images/stan_weights.png)
+
+3. Script also returns text file containing Q vector, experimental intensity,
+model intensity and experimental error.
 
 ### Generating input data
 
