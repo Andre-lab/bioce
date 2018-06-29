@@ -20,7 +20,6 @@ class ShiftX2:
 		self.dat_file = "cs.dat"
 		self.err_file = open("cs.err","w")
 		self.exp_file = open("cs_exp.dat","w")
-		self.exp_err = open("cs_exp.err","w")
 		self.dat_dict = {}
 		self.exp_res_name = {}
 		self.exp_shift = {}
@@ -62,8 +61,8 @@ class ShiftX2:
 					#print atom_name
 					continue
 				if count == 0:
-					self.exp_file.write(self.exp_shift[(res_number,res_name,atom_name)]+"\n")
-					self.exp_err.write(str(self.exp_errors[atom_name[0]])+"\n")
+					self.exp_file.write(self.exp_shift[(res_number,res_name,atom_name)]+
+										" "+str(self.exp_errors[atom_name[0]])+"\n")
 					err = self.shiftx2_rms[atom_name]
 					self.err_file.write(str(err)+"\n")
 				if line not in self.dat_dict.keys():
