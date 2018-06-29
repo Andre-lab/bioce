@@ -11,12 +11,11 @@ __email__ = "Wojciech.Potrzebowski@biochemistry.lu.se"
 
 import optparse
 import os
-import sys
-import numpy as np
-import string
+
 
 class ShiftX2:
 	def __init__(self, dir_name, exp_cs_file):
+		self.dir_name = dir_name
 		self.cs_list = [cs_file for cs_file in os.listdir(dir_name) if cs_file[-3:]==".cs"]
 		self.dat_file = "cs.dat"
 		self.err_file = open("cs.err","w")
@@ -33,8 +32,7 @@ class ShiftX2:
 		"HG3":0.1689, "HZ":0.2610}
 		self.exp_errors = {"N":0.3, "H":0.025, "C":0.3}
 		for exp_line in exp_lines:
-			values = string.split(exp_line)
-			print values
+			values = exp_line.split()
 			self.exp_shift[(values[0],values[1],values[2])]=values[3]
 			if values[0] not in self.exp_res_name:
 				self.exp_res_name[values[0]] = [(values[1],values[2])]
@@ -43,9 +41,9 @@ class ShiftX2:
 
 
 	def read_cs_file(self):
-		structure_list = open(self.cs_list).readlines()
-		for count, structure in  enumerate(structure_list):
-			cs_file = open(structure.strip("\n")+".cs")
+		for count, structure in  enumerate(self.cs_list):
+			cs_file_name = structure.strip("\n")
+			cs_file = open(os.path.join(self.dir_name,cs_file_name))
 			line = 0
 			for cs_line in cs_file.readlines():
 				if cs_line[:3] == "NUM":
@@ -85,9 +83,9 @@ if __name__=="__main__":
 	doc = """
 	Reads ShiftX2 list of structural files and produces data and error file for BW analysis
 	Chemical shifts should be produced with SHIFTX2 before running this script
-	Usage: python csDataPrep.py --help
+	Usage: python prepareChemicalShifts.py --help
 	"""
-	print doc
+	print(doc)
 	usage = "usage: %prog [options] args"
 	option_parser_class = optparse.OptionParser
 	parser = option_parser_class( usage = usage, version='0.1' )
@@ -99,7 +97,7 @@ if __name__=="__main__":
 
 	options, args = parser.parse_args()
 	dir_name = options.dir_name
-
+	exp_file = options.exp_file
 	shiftx2 = ShiftX2(dir_name, exp_file)
 	shiftx2.read_cs_file()
 	shiftx2.write_to_files()

@@ -77,7 +77,7 @@ if __name__=="__main__":
 	option_parser_class = optparse.OptionParser
 	parser = option_parser_class( usage = usage, version='0.1' )
 	parser.add_option("-s", "--structure_library", dest="dir_name",
-                      help="Directory containing pdb files")
+                      help="Directory containing pdb files [OBLIGATORY]")
 	parser.add_option("-e", "--experimental", dest="exp_file",
                       help="Experimental SAXS curves [OBLIGATORY]")
 	options, args = parser.parse_args()
