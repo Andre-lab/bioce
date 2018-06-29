@@ -47,7 +47,11 @@ def generate_scattering_profiles(dir_name, exp_file):
 
 	#TODO: This first line maybe omitted
 	number_of_structures = len(flist)
-	assert(int_dict.keys(), number_of_structures)
+	try:
+		assert int_dict.keys() == number_of_structures
+	except ArithmeticError as error:
+		print("List sizes are not equal", error)
+		
 	for count in int_dict.keys():
 		weights.write(str(1.0/number_of_structures)+" ")
 		structure_list.write(name_dict[count]+" ")
@@ -73,11 +77,11 @@ if __name__=="__main__":
 	usage = "usage: %prog [options] args"
 
 	if not os.path.exists("foxs"):
-        raise RuntimeError("FoXS not avaialble in the PATH."
+		raise RuntimeError("FoXS not avaialble in the PATH."
 						   "Please add FoXS locationn to PATH and run script again")
 	option_parser_class = optparse.OptionParser
 	parser = option_parser_class( usage = usage, version='0.1' )
-	parser.add_option("-s", "--structure_library", dest="dir_name",default = 0,
+	parser.add_option("-s", "--structure_library", dest="dir_name",
                       help="Directory containing pdb files")
 	parser.add_option("-e", "--experimental", dest="exp_file",
                       help="Experimental SAXS curves [OBLIGATORY]")
