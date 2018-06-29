@@ -22,35 +22,29 @@ def generate_scattering_profiles(dir_name, exp_file):
 	structure_list = open("strcutures.txt","w")
 	int_dict = {}
 	name_dict = {}
-	flist = open(file_list).readlines()
 
-	for count, pdb in enumerate(flist):
+	for count, pdb in enumerate(file_list):
 		pdb = pdb.strip("\n")
 		if pdb[-4:] != ".pdb":
 			continue
-		cmd_line = "foxs "+dir_name+"/"+pdb+" "+dir_name+"/"+exp_file
+		cmd_line = "foxs "+os.path.join(dir_name,pdb)+" "+exp_file
 		proc = Popen(shlex.split(cmd_line), stdout=PIPE, shell=False)
 		os.waitpid(proc.pid,0)
 		out, err = proc.communicate()
 		foxs_file = dir_name+"/"+pdb[:-4]+"_"+exp_file
 		int_dict[count] = []
 		name_dict[count] = pdb[:-4]
-		foxs_lines = open(foxs_file).readlines()[2:]
+		foxs_lines = open(foxs_file).readlines()[1:]
 		norm_c = 1E8
 		#TODO: Check this scaling parameter
 		scaling_c = norm_c*float(foxs_lines[0].split(",")[1][12:])
 		#print("C scaling", scaling_c)
-		for line in foxs_lines:
-			words=string.split(line)
+		for line in foxs_lines[2:]:
+			words=line.split()
 			intensity_foxs = float(words[2])/scaling_c
 			int_dict[count].append(str(intensity_foxs))
 
-	#TODO: This first line maybe omitted
-	number_of_structures = len(flist)
-	try:
-		assert int_dict.keys() == number_of_structures
-	except ArithmeticError as error:
-		print("List sizes are not equal", error)
+	number_of_structures = len(int_dict.keys())
 
 	for count in int_dict.keys():
 		weights.write(str(1.0/number_of_structures)+" ")
@@ -58,7 +52,7 @@ def generate_scattering_profiles(dir_name, exp_file):
 	structure_list.write("\n")
 	weights.write("\n")
 
-	for line in range(len(foxs_lines)):
+	for line in range(len(foxs_lines[2:])):
 		for count in int_dict.keys():
 			out_file.write(int_dict[count][line]+" ")
 		out_file.write("\n")
