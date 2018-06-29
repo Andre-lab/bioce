@@ -51,7 +51,7 @@ def generate_scattering_profiles(dir_name, exp_file):
 		assert int_dict.keys() == number_of_structures
 	except ArithmeticError as error:
 		print("List sizes are not equal", error)
-		
+
 	for count in int_dict.keys():
 		weights.write(str(1.0/number_of_structures)+" ")
 		structure_list.write(name_dict[count]+" ")
@@ -76,7 +76,8 @@ if __name__=="__main__":
 	print(doc)
 	usage = "usage: %prog [options] args"
 
-	if not os.path.exists("foxs"):
+	if not any([os.path.exists(os.path.join(p, "foxs"))
+							   for p in os.environ["PATH"].split(os.pathsep)]):
 		raise RuntimeError("FoXS not avaialble in the PATH."
 						   "Please add FoXS locationn to PATH and run script again")
 	option_parser_class = optparse.OptionParser
