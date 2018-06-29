@@ -95,3 +95,22 @@ python ../variationalBayesian.py -p flat_weights5models.txt -s TrmSimulatedInten
 ```
 
 
+### Using chemical shift data
+1. In order to use chemical shift data, one needs to install SHIFTX2. This can be done by following instructions at:
+[SHIFTX2](http://www.shiftx2.ca/download.html). This requires running python 2.6 or later, which won't work with
+conda bioce enviroment. You will need to deactivate envioremnt before proceeding:
+```
+source deactivate
+```
+Once shiftx2 is installed, cd to directory with pdbs and run:
+```
+python shiftx2.py -b '*.pdb' -f csv
+```
+This will run batch job to process all pds and generate file in csv format. Please refer to shiftx2 manual for further options
+
+2. Run a script that converts shiftx2 ouptut to input files for Bayesian inference
+```
+prepareBayesian.py -s strcuture_lib_dir -e experimental_data
+```
+This will generate a few files: cs.dat, cs.err with simulated chemical shifts and
+errors from PDB structures and cs_exp.dat, which contains experimental data in the aproprinate format.
