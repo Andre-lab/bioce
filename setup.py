@@ -42,5 +42,6 @@ setup(name = "bioce",
       ext_package='vbwSC',
       ext_modules=extensions,
       py_modules=['psis','psisloo','stan_models','stan_utility',
-                  'statistics','variationalBayesian','fullBayesian','prepareBayesian']
+                  'statistics','variationalBayesian','fullBayesian',
+                  'prepareBayesian', 'prepareChemicalShifts']
       )
