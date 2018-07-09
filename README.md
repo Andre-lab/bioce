@@ -69,19 +69,14 @@ python ../fullBayesian.py -p weights.txt -s SimulatedIntensities.txt -e simulate
 ### Output
 1. You should get simillar output to the one bellow:
 
->             mean se_mean     sd   2.5%    25%    50%    75%  97.5%  n_eff   Rhat
-
-> weights[0]   0.12  5.1e-4   0.02   0.07    0.1   0.12   0.13   0.16 1906.0    1.0
-
-> weights[1]   0.02  2.9e-4   0.01 7.4e-5 6.9e-3   0.02   0.03   0.05 2374.0    1.0
-
-> weights[2]   0.69  3.9e-4   0.02   0.65   0.68   0.69   0.71   0.73 2648.0    1.0
-
-> weights[3]   0.17  8.9e-4   0.04   0.09   0.15   0.17    0.2   0.25 1869.0    1.0
-
-> scale        1.14  2.4e-5 1.2e-3   1.14   1.14   1.14   1.14   1.14 2699.0    1.0
-
-> lp__       -171.0    0.05   1.69 -175.3 -171.9 -170.7 -169.8 -168.9 1404.0    1.0
+|          |   mean| se_mean|     sd|   2.5%|    25%|    50%|    75%|  97.5%|  n_eff|   Rhat|
+|----------|-------|--------|-------|-------|-------|-------|-------|-------|-------|-------|
+|weights[0]|   0.12|  5.1e-4|   0.02|   0.07|    0.1|   0.12|   0.13|   0.16| 1906.0|    1.0|
+|weights[1]|   0.02|  2.9e-4|   0.01| 7.4e-5| 6.9e-3|   0.02|   0.03|   0.05| 2374.0|    1.0|
+|weights[2]|   0.69|  3.9e-4|   0.02|   0.65|   0.68|   0.69|   0.71|   0.73| 2648.0|    1.0|
+|weights[3]|   0.17|  8.9e-4|   0.04|   0.09|   0.15|   0.17|    0.2|   0.25| 1869.0|    1.0|
+|scale     |   1.14|  2.4e-5| 1.2e-3|   1.14|   1.14|   1.14|   1.14|   1.14| 2699.0|    1.0|
+|lp__      | -171.0|    0.05|   1.69| -175.3| -171.9| -170.7| -169.8| -168.9| 1404.0|    1.0|
 
 2. Script also produces two images stan_weights.png and stan_scale.png,
 which graphically ilustrated distribution of population weights (shown below) and scaling parameter
