@@ -8,7 +8,7 @@ that maximizes the model evidence of the selected ensemble. This is followed by 
 
 ## Installation
 1. Download the latest 64-Bit Python 3.6 Installer from [Anaconda](http://continuum.io/downloads) and run it.
-2. Download [bioce file][bioce-1.0.zip] and unzip it e.g.
+2. Download [bioce-1.0.zip](bioce-1.0.zip) file and unzip it:
 ```
 unzip bioce-1.0.zip
 ```
