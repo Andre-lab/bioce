@@ -43,5 +43,7 @@ setup(name = "bioce",
       ext_modules=extensions,
       py_modules=['psis','psisloo','stan_models','stan_utility',
                   'statistics','variationalBayesian','fullBayesian',
-                  'prepareBayesian', 'prepareChemicalShifts']
+                  'prepareBayesian', 'prepareChemicalShifts'],
+      package_data={'bioce': ['bioce.yml']},
+      include_package_data=True,
       )

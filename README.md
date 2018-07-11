@@ -8,14 +8,13 @@ that maximizes the model evidence of the selected ensemble. This is followed by 
 
 ## Installation
 1. Download the latest 64-Bit Python 3.6 Installer from [Anaconda](http://continuum.io/downloads) and run it.
-2. If you don't have git installed, follow instructions at [Git page](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git),
-otherwise simply run in terminal:
+2. Download [bioce file][dist/bioce-1.0.zip] and unzip it e.g.
 ```
-git clone https://github.com/Andre-lab/bioce.git
+unzip bioce-1.0.zip
 ```
-3.	Install dependencies using yml file
+3. Install dependencies using yml file in directory where yml file is located
 ```
-cd bioce
+cd bioce-1.0
 conda env create -f bioce.yml
 ```
 4. Activate conda enviroment
