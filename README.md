@@ -19,7 +19,7 @@ conda env create -f bioce.yml
 ```
 4. Activate conda enviroment
 ```
-source activate bioce
+conda activate bioce
 ```
 5.	Build and install software (use –user flag if you want to install it for just single user)
 ```
@@ -27,8 +27,8 @@ python setup.py install
 ```
 6. Check if scripts start up
 ```
-python variationalBayesian.py –help
 python fullBayesian.py --help
+python variationalBayesian.py –-help
 ```
 If you see no errors but options menu pops up, you are good to go.
 
