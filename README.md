@@ -7,7 +7,7 @@ that maximizes the model evidence of the selected ensemble. This is followed by 
 ![Alt text](images/method_pipeline.png)
 
 ## Installation
-1. Download the latest 64-Bit Python 3.6 Installer from [Anaconda](http://continuum.io/downloads) and run it.
+1. Download the latest 64-Bit Python 3.7 Installer from [Miniconda](https://conda.io/miniconda.html) and follow instructions.
 2. Download [bioce-1.0.zip](bioce-1.0.zip) file and unzip it:
 ```
 unzip bioce-1.0.zip
@@ -19,11 +19,11 @@ conda env create -f bioce.yml
 ```
 4. Activate conda enviroment
 ```
-conda activate bioce
+source activate bioce
 ```
 5.	Build and install software (use –user flag if you want to install it for just single user)
 ```
-python setup.py install
+python setup.py build_ext --inplace
 ```
 6. Check if scripts start up
 ```
