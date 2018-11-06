@@ -1,3 +1,0 @@
-python /Users/wojciechpotrzebowski/Documents/masaxs/bioce/fullBayesian.py -P energies -s TrmIntSub.txt -e CAM_SMB_stdError.dat -f file_list_sub.txt -j 4 -c 2 -i 4000
-
-python /Users/wojtek/bioce/fullBayesian.py -P energies3models -s TrmIntSub3models.txt -e CAM_SMB_stdError.dat -f file_list_sub3models.txt -j 4 -c 4 -i 4000
