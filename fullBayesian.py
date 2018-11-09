@@ -129,8 +129,7 @@ def execute_stan_EP_CS(experimental, simulated, priors,
     sm = pystan.StanModel(model_code=stan_code_EP_CS)
     fit = sm.sampling(data=stan_dat, iter=iterations, chains=chains, n_jobs=njobs, sample_file="saved_samples.txt")
 
-    fig, ax = fit.plot(pars="weights")
-    ax.set_color_cycle(['red', 'black', 'yellow', 'green'])
+    fig = fit.plot(pars="weights")
     fig.subplots_adjust(wspace=0.8)
     fig.savefig("stan_weights_EP_CS.png", dpi=300)
 
