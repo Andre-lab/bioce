@@ -107,4 +107,4 @@ python ../variationalBayesian.py -P energies.txt -s TrmSimulatedIntensities5mode
 ```
 
 ## Webserver
-[Webserver](WEBSERVER.md) coming up soon!
+[Webserver](webserver.md) coming up soon!

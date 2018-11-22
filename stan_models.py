@@ -17,8 +17,6 @@ model {
   vector[n_structures] alphas;
   vector[n_measures] pred_curve;
   alphas = priors;
-  //scale ~ uniform(0,2);
-  scale ~ lognormal(0.8,0.4);
   weights ~ dirichlet(alphas);
   pred_curve = sim_curves * weights * scale;
   target_curve ~ normal(pred_curve, target_errors);
