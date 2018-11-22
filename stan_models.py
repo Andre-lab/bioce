@@ -40,7 +40,7 @@ data {
 
 parameters {
   simplex[n_structures] weights;
-  real<lower=0> scale;
+  real scale;
 }
 
 model {
@@ -48,7 +48,6 @@ model {
   vector[m_measures] pred_css;
   vector[m_measures] cs_errors;
   vector[n_structures] alphas;
-  scale ~ uniform(0,100);
   alphas = priors;
   weights ~ dirichlet(alphas);
   pred_saxs = sim_saxs * weights * scale;
@@ -73,14 +72,13 @@ data {
 
 parameters {
   simplex[n_structures] weights;
-  real<lower=0> scale;
+  real scale;
   real<lower=0> boltzmann_shift;
 }
 
 model {
   vector[n_measures] pred_curve;
   vector[n_structures] alphas;
-  scale ~ uniform(0,100);
   boltzmann_shift ~ uniform(0,300);
   alphas = exp(-1.717472947*(boltzmann_shift+energy_priors));
   weights ~ dirichlet(alphas);
@@ -106,7 +104,7 @@ data {
 
 parameters {
   simplex[n_structures] weights;
-  real<lower=0> scale;
+  real scale;
   real<lower=0> boltzmann_shift;
 }
 
@@ -116,7 +114,6 @@ model {
   vector[m_measures] cs_errors;
   vector[n_structures] alphas;
   boltzmann_shift ~ uniform(0,300);
-  scale ~ uniform(0,100);
   alphas = exp(-1.717472947*(boltzmann_shift+energy_priors));
   weights ~ dirichlet(alphas);
   pred_saxs = sim_saxs * weights * scale;
