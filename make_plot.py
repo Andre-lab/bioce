@@ -26,6 +26,89 @@ def read_file_safe(filename, dtype="float64"):
         print(os.strerror(err.errno))
     return results
 
+def make_fig1c(data, data_name, log=False):
+    """
+    Produces plot given the data
+    :param data:
+    :param log:
+    :return:
+    """
+    qvector = data[:,0]
+    #intensities = data[:,1:]
+
+    intensities = data[:,1]
+    line1, = plt.plot(qvector, intensities, '-o')
+    #plt.legend(handles=[line1])
+    #if log:
+    #    plt.semilogy(qvector, intensities, 'g-', linewidth=1.5)
+    #else:
+    #    plt.plot(qvector, intensities, '-o')
+    #    #plt.plot(qvector, intensities, 'k-', linewidth=1)
+
+    #plt.ylabel("$log(Intenisty)$")
+    #plt.xlabel("$q [\AA]$")
+    plt.ylabel("RMSD")
+    plt.xlabel("Noise $(\sigma)$")
+    plt.xticks([1,2,3,4,5])
+    plt.savefig(data_name+".png", dpi=600, bbox_inches='tight')
+    plt.show()
+
+
+def make_fig1b(data, data_name, log=False):
+    """
+    Produces plot given the data
+    :param data:
+    :param log:
+    :return:
+    """
+    matplotlib.rcParams.update({'font.size': 14})
+    qvector = data[:,0]
+    #intensities = data[:,1:]
+    fig = plt.figure()
+    ax = plt.subplot(111)
+
+    intensities = data[:,1]
+    line1, = ax.plot(qvector, intensities, '-o', label='Ng')
+    intensities = data[:,2]
+    line2, = ax.plot(qvector, intensities, '-o', label='models recovered')
+    intensities = data[:,3]
+    line3, = ax.plot(qvector, intensities, '-o', label='models recovered from preset')
+    #plt.legend(handles=[line1, line2, line3])
+
+    ax.legend(loc='upper center', bbox_to_anchor=(0.7, 1.17),
+              ncol=1, fancybox=True, shadow=True)
+    #if log:
+    #    plt.semilogy(qvector, intensities, 'g-', linewidth=1.5)
+    #else:
+    #    plt.plot(qvector, intensities, '-o')
+    #    #plt.plot(qvector, intensities, 'k-', linewidth=1)
+
+    #plt.ylabel("$log(Intenisty)$")
+    #plt.xlabel("$q [\AA]$")
+    plt.ylabel("Ng/Number of models")
+    plt.xlabel("Noise $(\sigma)$")
+    plt.savefig(data_name+".png", dpi=600)
+    plt.show()
+
+def make_s1fig(data, data_name):
+    """
+    Produces plot given the data
+    :param data:
+    :param log:
+    :return:
+    """
+    xvalues = data[:,0]
+
+    #SuppFig 1
+    for i in range(5):
+        yvalues = data[:,i+1]
+        line1, = plt.plot(xvalues, yvalues, '-o',  markersize=2)
+
+    plt.ylabel("weights")
+    plt.xlabel("Iteration")
+    plt.savefig(data_name+".png", dpi=600)
+    plt.show()
+
 def make_plot(data, data_name):
     """
     Produces plot given the data
@@ -42,9 +125,9 @@ def make_plot(data, data_name):
 
     #SuppFig2
     yvalues = data[:,1]
-    line1, = plt.plot(xvalues, yvalues, '-o',  markersize=4, label="energy (off)")
+    line1, = plt.plot(xvalues, yvalues, '-o',  markersize=4, label="energy (on)")
     yvalues = data[:,2]
-    line2, = plt.plot(xvalues, yvalues, '-o',  markersize=4, label="energy (on)")
+    line2, = plt.plot(xvalues, yvalues, '-o',  markersize=4, label="energy (off)")
 
     first_legend = plt.legend(handles=[line1], loc=1)
     # Add the legend manually to the current Axes.
@@ -55,7 +138,7 @@ def make_plot(data, data_name):
     yint=[2,3,4,5,6]
     plt.yticks(yint)
     plt.ylabel("Models recovered from preset")
-    plt.xlabel("noise $\sigma$")
+    plt.xlabel("Noise $(\sigma$)")
     plt.savefig(data_name+".png", dpi=600)
     plt.show()
 
@@ -96,6 +179,36 @@ def make_intensity_plot(data, simulated_data, log=False):
     #plt.figure(figsize=(8, 6))
     plt.savefig("SASfit.png", dpi=300, bbox_inches='tight')
     plt.show()
+
+
+def make_hbv_plot(data_sets, log=False):
+    """
+    Produces plot given the data
+    :param data:
+    :param log:
+    :return:
+    """
+    matplotlib.rcParams.update({'font.size': 18})
+
+    legend_lines = []
+    data_labels = ['2mer','4mer','6mer','10mer','full']
+    for i, data_file in enumerate(data_sets):
+        data = np.genfromtxt(data_file)
+        print(np.shape(data))
+        qvector = data[:,0]
+        exp_intensities = data[:,1]
+        line, = plt.plot(qvector, exp_intensities, label=data_labels[i])
+        legend_lines.append(line)
+    plt.legend(handles=legend_lines)
+    plt.yscale('log')
+    plt.ylabel("$log(Intenisty)$")
+    plt.xlabel("$q [\AA^{-1}]$")
+    #plt.ylabel("RMSD")
+    #plt.xlabel("Noise $(\sigma)$")
+    #plt.figure(figsize=(8, 6))
+    plt.savefig("HBV_profiles.png", dpi=300, bbox_inches='tight')
+    plt.show()
+
 
 def make_ppc_plot(data, log=False):
     """
@@ -152,9 +265,18 @@ def make_bar_plot():
     matplotlib.rcParams.update({'font.size': 22})
     xvalues = [1,3,5]
     heights = [0.424346, 0.54757, 0.476754]
-    widhts = [1.4, 1.4, 1.4]
+    widhts = [1.2, 1.2, 1.2]
     fig, ax = plt.subplots(1, 1)
-    plt.bar(xvalues, heights, widhts, linewidth=3, edgecolor='orange', color='None')
+    barlist = plt.bar(xvalues, heights, widhts, linewidth=3, edgecolor='black')
+    barlist[0].set_color('blue')
+    barlist[0].set_edgecolor('black')
+    #barlist[0].set_hatch('/')
+    barlist[1].set_color('orange')
+    barlist[1].set_edgecolor('black')
+    #barlist[1].set_hatch('/')
+    barlist[2].set_color('green')
+    barlist[2].set_edgecolor('black')
+    #barlist[2].set_hatch('/')
     ax.set_ylabel("Model Evidence")
     ax.set_xticks(xvalues)
     ax.set_xticklabels(['2models', '3models', '4models'])
@@ -203,8 +325,11 @@ if __name__=="__main__":
 
     data_file = options.data_file
     data = read_file_safe(data_file)
-
+    data_name = 'fig1b'
     #combined_data_file = options.combined_data_file
     #combined_data = read_file_safe(combined_data_file)
-    make_ppc_plot(data,data_file)
-    #make_bar_plot()
+    #make_ppc_plot(data,data_file)
+    make_fig1b(data, data_name)
+    #data_sets = ['1qgt_2mer00.int','1qgt_4mer00.int','1qgt_6mer00.int','1qgt_10mer00.int','1qgt_full00.int']
+    #data_sets = ['1qgt_2mer.pdb.dat','1qgt_4mer.pdb.dat','1qgt_6mer.pdb.dat','1qgt_10mer.pdb.dat','1qgt_full.pdb.dat']
+    #make_hbv_plot(data_sets, True)
