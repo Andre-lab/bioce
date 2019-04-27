@@ -32,6 +32,19 @@ python variationalBayesian.py –-help
 ```
 If you see no errors but options menu pops up, you are good to go.
 
+## Problems with installation on OSX 10.14 (Mojave)
+There is a known issue with xcode installation on OSX 10.14 (Mojave)
+If you see the following error:
+```
+test.c:8:10: fatal error: stdio.h: No such file or directory
+#include <stdio.h>
+         ^~~~~~~~~
+compilation terminated.
+```
+please try the installation of the following package
+```
+open /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg
+```
 ## Running examples
 
 ### Generating input data
