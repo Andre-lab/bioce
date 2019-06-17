@@ -27,10 +27,11 @@ if sys.platform == 'darwin':
             print("PROBLEM determining Darwin version")
 
 extensions = [Extension('_vbwSC', ["vbw_sc.i", "VBW_sc.cpp"],
-                             swig_opts=["-c++","-I/usr/include/python2.7"],
+                             swig_opts=["-c++"],
                              extra_compile_args= ["-fpic", "-fopenmp",
-                                              "-O3", "-std=c++11" ],
-                             libraries =[ "gsl", "gslcblas", "m"]
+                                              "-O3", "-std=c++11"],
+                             #extra_link_args= ["-shared", " -fopenmp"],
+                             libraries =[ "gsl", "gslcblas", "m", "python3.7m"]
                              )]
 
 setup(name = "bioce",
