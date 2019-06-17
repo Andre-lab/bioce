@@ -7,7 +7,7 @@ that maximizes the model evidence of the selected ensemble. This is followed by 
 ![Alt text](images/method_pipeline.png)
 
 ## Installation
-1. Download the latest 64-Bit Python 3.7 Installer from [Miniconda](https://conda.io/miniconda.html) and follow instructions.
+1. Download the latest 64-Bit Python 3.7 Installer from [Anaconda](https://www.anaconda.com/distribution/) and follow instructions.
 2. Download [bioce-1.0.zip](bioce-1.0.zip) file and unzip it:
 ```
 unzip bioce-1.0.zip
@@ -23,7 +23,7 @@ source activate bioce
 ```
 5.	Build and install software (use –user flag if you want to install it for just single user)
 ```
-python setup.py build_ext --inplace
+python setup.py build
 ```
 6. Check if scripts start up
 ```
@@ -45,6 +45,16 @@ please try the installation of the following package
 ```
 open /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg
 ```
+
+There may also be issues on with running variationalBayesian.py. 
+The solution to this may be compiling the module manually. 
+This would require running modified compile.sh file (changing path to your home directory) 
+```
+https://github.com/Andre-lab/bioce/blob/master/compile.sh
+```
+I am aware this is not optimal solution and proper fix will hopefully come soon 
+
+
 ## Running examples
 
 ### Generating input data

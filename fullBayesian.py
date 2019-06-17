@@ -406,7 +406,7 @@ def combine_curve(experimental, simulated, weights, scale):
 
 if __name__=="__main__":
     doc = """
-        Python interface to Variational Bayesian algorithm
+        Python interface to Complete Bayesian algorithm
         Usage: python runVBW.py --help
     """
     print(doc)

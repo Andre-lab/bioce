@@ -49,7 +49,7 @@ def read_file_safe(filename, skip_lines, dtype="float64"):
     return results
 
 def extract_parameters(filename):
-    data = read_file_safe(filename)
+    data = read_file_safe(filename,0)
     return np.shape(data)
 
 if __name__=="__main__":
@@ -97,7 +97,7 @@ if __name__=="__main__":
     #In this version there is only one curve taken into consideration
     ncurves = 1
     (number_of_structures, number_of_measures) = extract_parameters(options.simulated)
-    if options.cs_experimental:
+    if options.cs_experimental!='None':
         (number_of_cs_structures, number_of_cs_measures) = extract_parameters(options.cs_simulated)
         if number_of_cs_structures != number_of_structures:
             raise('Number of saxs and nmr simulated curves differ')
