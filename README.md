@@ -48,7 +48,7 @@ open /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10
 
 There may also be issues on with running variationalBayesian.py. 
 The solution to this may be compiling the module manually. 
-This would require running modified compile.sh file (changing path to your home directory) 
+This would require running compile.sh file (you may need to change permission to this file). 
 ```
 https://github.com/Andre-lab/bioce/blob/master/compile.sh
 ```
@@ -79,7 +79,7 @@ to run Bayesian inference in the next step.
 2. Run variational Bayesian inference
 Once you prepare input files as described in step 1, you can run model selection using variational Bayesian inference:
 ```
-python ../variationalBayesian.py -p flat_weights5models.txt -s TrmSimulatedIntensities5models.dat -e synthetic_60p.dat -f names5models.txt -w 0.01
+python ../variationalBayesian.py -s SimulatedIntensities.txt -e simulated.dat -f structures.txt -p weights.txt -w 0.01 -o output
 ```
 where w is the weight therhold used for prunning models in after each iteration
 3. Run complete Bayesian inference
