@@ -96,13 +96,15 @@ if __name__=="__main__":
 
     #In this version there is only one curve taken into consideration
     ncurves = 1
-    (number_of_structures, number_of_measures) = extract_parameters(options.simulated)
+    (number_of_measures, number_of_structures) = extract_parameters(options.simulated)
+
     if options.cs_experimental!='None':
         (number_of_cs_structures, number_of_cs_measures) = extract_parameters(options.cs_simulated)
         if number_of_cs_structures != number_of_structures:
             raise('Number of saxs and nmr simulated curves differ')
     else:
-        number_of_cs_measures = 0
+        number_of_cs_measures = 1
+
     vbwSC.run_vbw(options.restart, number_of_structures, options.priors, options.structure_energies,\
                   number_of_measures, number_of_cs_measures, options.simulated, ncurves, options.experimental,\
                   options.output, options.nprocs, options.weight_cut, options.skip_vbw,\
