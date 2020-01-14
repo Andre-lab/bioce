@@ -64,10 +64,19 @@ def generate_file_list(pdb_list):
     f.writelines(line_to_write)
     f.close()
 
+def generate_weights(pdb_list):
+    out = open("weights.txt", "w")
+    files = read_file_safe(pdb_list, 0, 'unicode')
+    len_models = len(files)
+    fwght = 1.0 / (len_models)
+    for i in range(len_models):
+        out.write(str(fwght) + " ")
+    out.close()
+
 if __name__ == "__main__":
     pdb_list = open(sys.argv[1]).readlines()
     experimental_file = sys.argv[2]
     generate_file_list(pdb_list)
+    generate_weights(pdb_list)
     intensities = process_pdbs_with_experimental(pdb_list, experimental_file)
-    #Dummy errors added
     np.savetxt('SimulatedIntensities.txt', intensities)
