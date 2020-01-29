@@ -129,5 +129,22 @@ to use them by suppling "-P" instead of "-p" flag, e.g.
 python ../variationalBayesian.py -P energies.txt -s TrmSimulatedIntensities5models.dat -e synthetic_60p.dat -f names5models.txt -w 0.01
 ```
 
+
+### Analyzing time-resolved data set
+In order to analyze data from time-resolved SAS experimenent where multiple data sets are available one should use fullBayesianTR.py script. 
+It requiers the same input files and parameters as a single file version, however now experimental file is the list of files eperimental files (experimental_list)
+In addition the script also reads in errors of the simulated scattering pattern givem for each q value. And in order to run script iteratively 
+one can specify iteration with '-I' parameter, e.g. 
+```
+python ../fullBayesianTR.py -p weights.txt -s SimulatedInitensities.txt -E SimulatedErrors.txt -e experimental_list -o batch_results -f file_list -i 2000 -j 4 -c 4 -I 0
+```
+The fullBayesianTR.py script produces iteration_* folder, which contains necessary python files. In order to perform Gaussian Processing regression to smooth weights 
+one needs to run:  
+```
+python ../gpSmoothing iteration_0/batch_results
+```
+gpSmoothing script will produce a set of weights for each specie and save them to prior_matrix.txt file. 
+This file can be used as a input for next iterations 
+
 ## Webserver
 [Webserver](webserver.md) coming up soon!
