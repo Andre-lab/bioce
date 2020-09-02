@@ -10,9 +10,23 @@ __email__ = "Wojciech.Potrzebowski@biochemistry.lu.se"
 
 import numpy as np
 from scipy.special import gamma, digamma
+from scipy import optimize
 import optparse
 #import vbwSC
 import os
+
+
+def read_file_safe(filename, dtype="float64"):
+    """
+    Simple check if file exists
+    :param filename:
+    :return:
+    """
+    try:
+        results = np.genfromtxt(filename, dtype=dtype)
+    except IOError as err:
+        print(os.strerror(err.errno))
+    return results
 
 def produce_final_output(output, file_list):
     #1. Match file list with weight list
@@ -53,44 +67,12 @@ def extract_parameters(filename):
     data = read_file_safe(filename,0)
     return np.shape(data)
 
-
-def evaluate_Lfunction(experimental, errors, intensities, gamma_over_lhalf, gamma_half, mixed_terms):
+def setup_constants(simulated, errors):
     """
 
     :return:
     """
-    Lfunc = 0.0
-    term1 = 0.0
-    term2 = 0.0
-    term3 = 0.0
-    term4 = 0.0
-    alpha_zero = np.sum(alphas)
-    for alpha in alphas:
-        term1 += np.log(gamma_half/gamma(alpha))
-        #TODO: This lime can be optimizied
-        term2 += (alpha - 0.5)*(digamma(alpha)-digamma(alpha_zero))
-    for i in range(intensities):
-        for j, alpha in enumerate(alphas):
-            term3 += np.pow(experimental - intensities[i,j]*alpha/alpha_zero)
-    term3 = 0.5*term3/errors
-
-    for i in range(alphas):
-        for j in range(alphas):
-            alpha_i = alphas[i]
-            alpha_j = alphas[j]
-            for k in range(intensities):
-
-                term4+=mixed_terms[i,j,k]*(alpha_i*(alpha_zero - alpha_i) - alpha_i*alpha_j)/\
-                       (alpha_zero**2*(alpha_zero + 1))
-    term4 = 0.5 * term4
-    Lfunc = np.log(gamma_over_lhalf*gamma(alpha_zero)) + term1 + term2 + term3 + term4
-    return Lfunc
-
-def setup_constants(number_of_measurements, intensities, errors):
-    """
-
-    :return:
-    """
+    (number_of_measurements, number_of_structures) = extract_parameters(simulated)
 
     gamma_over_lhalf = 1.0/gamma(0.5*number_of_measurements)
     gamma_half = gamma(0.5)
@@ -103,10 +85,83 @@ def setup_constants(number_of_measurements, intensities, errors):
     #TODO: Errors need to have proper shape (reshape may be used).
     for i in range(number_of_structures):
         for j in range(number_of_structures):
-            for k in range(intensities.spape()[0]):
-                mixed_terms[i,j,k] = intensities[k,i]*intensities[k,j]\
+            for k in range(number_of_measurements):
+                mixed_terms[i,j,k] = simulated[k,i]*simulated[k,j]\
                                      /(errors[k]**errors[k])
     return gamma_over_lhalf, gamma_half, mixed_terms
+
+def Lfunction(alphas, *params):
+    """
+
+    :return:
+    """
+    experimental, errors, intensities, gamma_over_lhalf, gamma_half, mixed_terms = params
+    term1 = 0.0
+    term2 = 0.0
+    term3 = 0.0
+    alpha_zero = np.sum(alphas)
+    for alpha in alphas:
+        term1 += np.log(gamma_half/gamma(alpha))
+        #TODO: This lime can be optimizied
+        term1 += (alpha - 0.5)*(digamma(alpha)-digamma(alpha_zero))
+    for i in range(intensities):
+        for j, alpha in enumerate(alphas):
+            term2 += np.pow(experimental - intensities[i,j]*alpha/alpha_zero)
+    term2 = 0.5*term2/errors
+
+    for i in range(alphas):
+        for j in range(alphas):
+            alpha_i = alphas[i]
+            alpha_j = alphas[j]
+            for k in range(intensities):
+                if i == j:
+                    term3 += mixed_terms[i,j,k] * (alpha_i * (alpha_zero - alpha_i) - alpha_i * alpha_j)
+                else:
+                    term3 += mixed_terms[i, j, k] * (alpha_zero**2*(alpha_zero + 1))
+    term3 = 0.5 * term3
+    Lfunc = np.log(gamma_over_lhalf*gamma(alpha_zero)) + term1 + term2 + term3
+    return Lfunc
+
+def simulated_annealing(simulated, priors, intensities, errors, gamma_over_lhalf, gamma_half, mixed_terms):
+    """
+    Performs simulated anealing and returns weights. It is paramterized with alphas
+    :return:
+    """
+
+    params = intensities, errors, simulated, gamma_over_lhalf, gamma_half, mixed_terms
+    alphas0 = priors
+    res = optimize.anneal(Lfunction, alphas0, args=params, schedule='boltzmann',
+                          full_output=True, maxiter=500, lower=-10,
+                          upper=10, dwell=250, disp=True)
+
+def run_variational(simulated_file, priors_file, experimental_file, output_file, file_list, weight_cut):
+    """
+
+    :param simulated_file:
+    :param priors_file:
+    :param experimental_file:
+    :param output_file:
+    :param file_list:
+    :param weight_cut:
+    :return:
+    """
+
+
+    experimental = read_file_safe(experimental_file)
+    intensities = experimental[:, 1]
+    errors = experimental[:,2]
+    simulated = read_file_safe(simulated_file)
+    priors = read_file_safe(priors_file)
+
+    gamma_over_lhalf, gamma_half, mixed_terms = setup_constants(simulated, errors)
+
+    #TODO: Write to the same format or may them talk to each other
+    #TODO: Here we need a loop for model selection
+    simulated_annealing(simulated, priors, intensities, errors,
+                        gamma_over_lhalf, gamma_half, mixed_terms)
+
+    produce_final_output(output_file, file_list)
+
 
 if __name__=="__main__":
     doc = """
@@ -122,48 +177,16 @@ if __name__=="__main__":
                       help="Simulated SAXS curves [OBLIGATORY]")
     parser.add_option("-e", "--experimental", dest="experimental",
                       help="Experimental SAXS curves [OBLIGATORY]")
-    parser.add_option("-S", "--cs_simulated", dest="cs_simulated", default="None",
-                      help="Simulated CS data")
-    parser.add_option("-E", "--cs_experimental", dest="cs_experimental", default="None",
-                      help="Experimental CS data")
-    parser.add_option("-R", "--cs_rms", dest="cs_rms", default="None",
-                      help="RMS of simulated CS data")
     parser.add_option("-p", "--priors", dest="priors",
                       help="Prior weights [OBLIGATORY]")
-    parser.add_option("-P", "--strcuture_energies", dest="structure_energies", default="None",
-                      help="Energies of strcutures used to setup priors")
     parser.add_option("-o", "--output", dest="output",
                       help="Output file [OBLIGATORY]")
-    parser.add_option("-c", "--cores", dest="nprocs",default = 1,
-                      type = 'int',
-                      help="Number of proccessors")
     parser.add_option("-w", "--weights", dest="weight_cut",default = None,
                       type = 'float',
                       help="Weight cutoff [OBLIGATORY]")
-    parser.add_option("-k", "--skip_vbw", dest="skip_vbw",default = 0,
-                      type = 'int',
-                      help="Skipping VBW step goes to model evidence directly")
     parser.add_option("-f", "--file_list", dest="file_list",
                       help="List of structure files")
-    parser.add_option("-r", "--restart", dest="restart", default=0,
-                      type='int',
-                      help="Restart or not after equilibration")
     options, args = parser.parse_args()
 
-    #In this version there is only one curve taken into consideration
-    ncurves = 1
-    (number_of_measures, number_of_structures) = extract_parameters(options.simulated)
-
-    if options.cs_experimental!='None':
-        (number_of_cs_structures, number_of_cs_measures) = extract_parameters(options.cs_simulated)
-        if number_of_cs_structures != number_of_structures:
-            raise('Number of saxs and nmr simulated curves differ')
-    else:
-        number_of_cs_measures = 1
-
-    # vbwSC.run_vbw(options.restart, number_of_structures, options.priors, options.structure_energies,\
-    #               number_of_measures, number_of_cs_measures, options.simulated, ncurves, options.experimental,\
-    #               options.output, options.nprocs, options.weight_cut, options.skip_vbw,\
-    #               options.cs_simulated, options.cs_rms, options.cs_experimental)
-
-    produce_final_output(options.output, options.file_list)
+    run_variational(options.simulated, options.priors, options.experimental,
+                    options.output, options.file_list, options.weight_cut)
